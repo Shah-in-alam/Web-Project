@@ -5,9 +5,10 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
-const indexRouter = require('./routes/index');
+// const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-
+const homeRouter = require('./routes/home');
+const bookingRouter = require('./routes/booking');
 const app = express();
 
 // Enable CORS for all origins
@@ -30,8 +31,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 // Use routers
-app.use('/', indexRouter);
+// app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/home', homeRouter); 
+app.use('/booking', bookingRouter); 
 
 // Start the server on port 3000
 app.listen(3000, () => {
