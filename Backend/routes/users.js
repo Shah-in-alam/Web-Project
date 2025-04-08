@@ -5,11 +5,11 @@ const bcrypt = require('bcrypt');
 
 const prisma = new PrismaClient();
 
-// SIGNUP POST route
+//SIGNUP POST route
 router.post('/signup', async (req, res) => {
-  const { user_id, name, email, password, phone, address } = req.body;
+  const {  name, email, password, phone, address } = req.body;
 
-  if (!user_id || !name || !email || !password || !phone || !address) {
+  if ( !name || !email || !password || !phone || !address) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
@@ -22,7 +22,6 @@ router.post('/signup', async (req, res) => {
 
   await prisma.user.create({
     data: {
-      user_id,
       name,
       email,
       password: hashedPassword,
