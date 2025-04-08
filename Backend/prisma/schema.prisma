@@ -37,3 +37,28 @@ model Booking {
 
   createdAt DateTime @default(now())
 }
+model Campaign {
+  spot_id        Int     @id @default(autoincrement())
+  name           String
+  location       String
+  price_per_night Float
+  capacity       Int
+  features_id    Int
+
+  feature        Feature @relation(fields: [features_id], references: [features_id])
+}
+
+model Feature {
+  features_id   Int      @id @default(autoincrement())
+  feature_name  String
+  description   String?
+  image_url     String?
+  available     Boolean  @default(true)
+  is_paid       Boolean  @default(false)
+  type          String?
+  rating        Float?   // optional
+  popularity    Int      @default(0)
+  category      String?
+ 
+  campaigns     Campaign[]
+}
