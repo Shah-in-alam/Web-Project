@@ -4,38 +4,43 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-// POST /booking route to create a booking
-router.post('/booking', async (req, res) => {
-    const { spot_id, name, price, amount, check_in, check_out, user_id } = req.body;
-  
-    // Validate if all required fields are provided
-    if (!spot_id || !name || !price || !amount || !check_in || !check_out || !user_id) {
-      return res.status(400).json({ message: 'All fields are required' });
+router.post('/', async (req, res) => {
+  const {booking_id, spot_id, name, price, amount, check_in, check_out, user_id } = req.body;
+
+  if (!spot_id || !name || !price || !amount || !check_in || !check_out || !user_id) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { user_id }, // Directly use user_id like "shahin123"
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
-  
-    try {
-      // Create a new booking associated with the user
-      const newBooking = await prisma.booking.create({
-        data: {
-          spot_id,
-          name,
-          price,
-          amount,
-          check_in: new Date(check_in),  // Convert string to Date object
-          check_out: new Date(check_out), // Convert string to Date object
-          user_id,
-          status: 'Pending', // Default status
-        }
-      });
-  
-      // Respond with the created booking
-      res.status(201).json({
-        message: 'Booking created successfully',
-        booking: newBooking
-      });
-    } catch (error) {
-      res.status(500).json({ error: 'Booking creation failed', details: error });
-    }
-  });
-  
+
+    const newBooking = await prisma.booking.create({
+      data: {
+        booking_id,
+        spot_id,
+        name,
+        price: parseFloat(price),
+        amount: parseInt(amount),
+        check_in: new Date(check_in),
+        check_out: new Date(check_out),
+        user_id: user.user_id,
+        status: 'Pending',
+      },
+    });
+
+    res.status(201).json({
+      message: 'Booking created successfully',
+      booking: newBooking,
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Booking creation failed', details: error });
+  }
+});
+
 module.exports = router;
