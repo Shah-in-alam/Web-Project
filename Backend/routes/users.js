@@ -66,7 +66,7 @@ router.post('/signin', async (req, res) => {
 });
 
 // POST /users route to create a new user
-router.post('/users', async (req, res) => {
+router.post('/', async (req, res) => {
   const { user_id, name, email, password, phone, address } = req.body;
 
   if (!user_id || !name || !email || !password || !phone || !address) {
@@ -105,7 +105,7 @@ router.post('/users', async (req, res) => {
 });
 
 // GET all users
-router.get('/users', async (req, res) => {
+router.get('/', async (req, res) => {
   const users = await prisma.user.findMany();
   res.status(200).json(users);
 });
