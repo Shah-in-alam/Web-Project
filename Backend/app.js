@@ -12,6 +12,7 @@ const bookingRouter = require('./routes/booking');
 const campaignRouter = require('./routes/campaign');
 const featureRouter = require('./routes/feature');
 const reviewRouter = require('./routes/review');
+const adminRoutes = require('./routes/admin');
 const app = express();
 
 // Enable CORS for all origins
@@ -41,6 +42,7 @@ app.use('/booking', bookingRouter);
 app.use('/campaign', campaignRouter);
 app.use('/feature', featureRouter);
 app.use('/review',reviewRouter);
+app.use('/admin', adminRoutes);
 // Start the server on port 3000
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');
