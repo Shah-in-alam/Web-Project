@@ -7,6 +7,7 @@
       <router-link to="/campaign">Campaign</router-link>
       <router-link to="/feature">Feature</router-link>
       <router-link to="/review">Review</router-link>
+      <router-link v-if="user && user.role === 'admin'" to="/admin">Admin</router-link>
       <a href="#" @click.prevent="logout">Logout</a>
     </div>
 
@@ -24,14 +25,19 @@ export default {
   computed: {
     isLoggedIn() {
       return !!localStorage.getItem('user')
-    }
+    },
+    user() {
+      return JSON.parse(localStorage.getItem('user'));
+    
+  }
   },
   methods: {
     logout() {
       localStorage.removeItem('user')
       this.$router.push('/signin')
     }
-  }
+  },
+  
 }
 </script>
 
