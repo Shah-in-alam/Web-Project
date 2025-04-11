@@ -42,5 +42,21 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: 'Booking creation failed', details: error });
   }
 });
+// PATCH /bookings/cancel/:id
+// PATCH /bookings/cancel/:id
+router.patch('/cancel/:id', async (req, res) => {
+  const bookingId = req.params.id;
 
+  try {
+    const updatedBooking = await prisma.booking.update({
+      where: { booking_id: bookingId },
+      data: { status: 'Canceled' }
+    });
+
+    res.json({ message: 'Booking canceled successfully', booking: updatedBooking });
+  } catch (error) {
+    console.error('Cancel failed:', error);
+    res.status(500).json({ error: 'Failed to cancel booking', details: error.message });
+  }
+});
 module.exports = router;

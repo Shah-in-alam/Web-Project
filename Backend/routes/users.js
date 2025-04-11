@@ -36,35 +36,36 @@ router.post('/signup', async (req, res) => {
 
 // POST /signin route for authenticating user
 router.post('/signin', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body
 
   if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required.' });
+    return res.status(400).json({ error: 'Email and password are required.' })
   }
 
   try {
-    // Retrieve user from database by email
     const user = await prisma.user.findUnique({
-      where: { email: email },  // Find user by email
-    });
+      where: { email }
+    })
 
-    // Check if user exists and compare the hashed password
-    if (user && await bcrypt.compare(password, user.password)) {
-      // If credentials match, respond with a success message
-      res.status(200).json({
-        message: 'You have successfully signed in!',
-        user: { id: user.user_id, name: user.name, email: user.email }
-      });
-    } else {
-      // If credentials don't match
-      res.status(400).json({ error: 'Invalid email or password' });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' })
     }
-  } catch (error) {
-    // Handle any errors (e.g., DB connection errors)
-    res.status(500).json({ error: 'Server error', details: error });
-  }
-});
 
+    const passwordMatch = await bcrypt.compare(password, user.password)
+
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid password' })
+    }
+
+    res.status(200).json({
+      message: 'You have successfully signed in!',
+      user: { id: user.user_id, name: user.name, email: user.email }
+    })
+  } catch (error) {
+    console.error('SignIn Error:', error)
+    res.status(500).json({ error: 'Server error' })
+  }
+})
 // POST /users route to create a new user
 router.post('/', async (req, res) => {
   const { user_id, name, email, password, phone, address } = req.body;
