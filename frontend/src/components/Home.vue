@@ -2,13 +2,126 @@
   <div>
     <Navbar />
     <h1>Welcome to Home</h1>
+
+    <h2>Booking Overview</h2>
+    <div v-if="loading">Loading...</div>
+    <div v-if="error" style="color: red">{{ error }}</div>
+
+    <table v-if="bookings.length" class="booking-table">
+      <thead>
+        <tr>
+          <th>Booking ID</th>
+          <th>User</th>
+          <th>Spot ID</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Amount</th>
+          <th>Check In</th>
+          <th>Check Out</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="booking in bookings" :key="booking.booking_id">
+          <td>{{ booking.booking_id }}</td>
+          <td>{{ booking.user?.name }}</td>
+          <td>{{ booking.spot_id }}</td>
+          <td>{{ booking.name }}</td>
+          <td>{{ booking.price }}</td>
+          <td>{{ booking.amount }}</td>
+          <td>{{ formatDate(booking.check_in) }}</td>
+          <td>{{ formatDate(booking.check_out) }}</td>
+          <td>{{ booking.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Cancel Booking Section -->
+    <div class="cancel-section">
+      <h3>Cancel a Booking</h3>
+      <input v-model="cancelId" placeholder="Enter booking ID" />
+      <button @click="cancelBooking">Cancel Booking</button>
+      <p v-if="cancelMessage" style="color: green">{{ cancelMessage }}</p>
+      <p v-if="cancelError" style="color: red">{{ cancelError }}</p>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import Navbar from './Navbar.vue'
+
 export default {
   name: 'HomePage',
-  components: { Navbar }
+  components: { Navbar },
+  data() {
+    return {
+      bookings: [],
+      loading: true,
+      error: '',
+      cancelId: '',
+      cancelMessage: '',
+      cancelError: ''
+    }
+  },
+  methods: {
+    async fetchBookings() {
+      try {
+        const res = await axios.get('http://localhost:3000/home')
+        this.bookings = res.data.bookings
+        this.loading = false
+      } catch (err) {
+        this.error = err.response?.data?.error || 'Failed to load bookings'
+        this.loading = false
+      }
+    },
+    formatDate(dateStr) {
+      const date = new Date(dateStr)
+      return date.toLocaleDateString()
+    },
+    async cancelBooking() {
+      this.cancelMessage = ''
+      this.cancelError = ''
+      if (!this.cancelId.trim()) {
+        this.cancelError = 'Please enter a valid booking ID'
+        return
+      }
+
+      try {
+        const res = await axios.patch(`http://localhost:3000/booking/cancel/${this.cancelId}`)
+        this.cancelMessage = res.data.message
+        this.fetchBookings() // Refresh list
+      } catch (err) {
+        this.cancelError = err.response?.data?.details || 'Failed to cancel booking'
+      }
+    }
+  },
+  mounted() {
+    this.fetchBookings()
+  }
 }
 </script>
+
+<style scoped>
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+.booking-table th,
+.booking-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+.booking-table th {
+  background-color: #f2f2f2;
+}
+.cancel-section {
+  margin-top: 30px;
+}
+.cancel-section input {
+  padding: 6px;
+  margin-right: 8px;
+}
+</style>

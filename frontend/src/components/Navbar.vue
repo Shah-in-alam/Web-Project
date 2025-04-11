@@ -1,5 +1,5 @@
 <template>
-  <nav>
+  <nav class="navbar">
     <!-- If user is logged in, show full navbar -->
     <div v-if="isLoggedIn">
       <router-link to="/">Home</router-link>
@@ -38,14 +38,31 @@ export default {
 <style scoped>
 .navbar {
   display: flex;
-  justify-content: center;       /* Center links horizontally */
-  align-items: center;           /* Center items vertically */
-  gap: 2rem;                     /* Spacing between links */
-  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 12px;
   background-color: #f2f2f2;
   font-weight: bold;
-  text-align: center;
-  width: 100%;                   /* Full width for centering */
-  box-sizing: border-box;        /* Prevent overflow */
+  width: 100vw;
+  box-sizing: border-box;
+}
+
+/* Style for router-link and a tags */
+.navbar a,
+.navbar router-link {
+  text-decoration: none;
+  color: black;
+  background-color: gray;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect */
+.navbar a:hover,
+.navbar router-link:hover {
+  background-color: green;
+  color: white;
 }
 </style>

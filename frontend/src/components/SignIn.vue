@@ -7,6 +7,7 @@
       <input v-model="form.password" type="password" placeholder="Password" required />
       <button type="submit">Sign In</button>
     </form>
+    <a href="#" @click.prevent="Forget">Forget Password?</a>
     <p v-if="message" style="color: green">{{ message }}</p>
     <p v-if="error" style="color: red">{{ error }}</p>
   </div>
