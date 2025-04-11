@@ -1,15 +1,14 @@
 <template>
-  <div class="signin">
-  
+  <div class="signin-box">
     <h2>Sign In</h2>
     <form @submit.prevent="handleSignIn">
       <input v-model="form.email" type="email" placeholder="Email" required />
       <input v-model="form.password" type="password" placeholder="Password" required />
       <button type="submit">Sign In</button>
     </form>
-    <a href="#" @click.prevent="Forget">Forget Password?</a>
-    <p v-if="message" style="color: green">{{ message }}</p>
-    <p v-if="error" style="color: red">{{ error }}</p>
+    <a href="#" @click.prevent="Forget" class="forget-link">Forget Password?</a>
+    <p v-if="message" class="success">{{ message }}</p>
+    <p v-if="error" class="error">{{ error }}</p>
   </div>
 </template>
 
@@ -46,21 +45,50 @@ export default {
 </script>
 
 <style scoped>
-.signin {
-  max-width: 400px;
-  margin: auto;
-  padding-top: 2rem;
+.signin-box {
+  background-color: #d4edda; /* Light green */
+  padding: 2rem;
+  border-radius: 10px;
+  width: 400px;
+  margin: 2rem auto;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 input {
   display: block;
-  margin: 10px 0;
-  padding: 8px;
-  width: 100%;
-}
-button {
+  margin: 10px auto;
   padding: 10px;
+  width: 90%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
   background-color: #42b983;
   color: white;
+  padding: 10px 20px;
   border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #369b73;
+}
+
+.forget-link {
+  display: block;
+  margin-top: 10px;
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.success {
+  color: green;
+}
+
+.error {
+  color: red;
 }
 </style>

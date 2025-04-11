@@ -1,5 +1,5 @@
 <template>
-    <div class="signup">
+    <div class="signup-box">
       <h2>Sign Up</h2>
       <form @submit.prevent="handleSignUp">
         <input v-model="form.user_id" placeholder="User ID" required />
@@ -47,25 +47,46 @@
       }
     }
   }
-  </script>
-  
-  <style scoped>
-  .signup {
-    max-width: 400px;
-    margin: auto;
-    padding-top: 2rem;
-  }
-  input {
-    display: block;
-    margin: 10px 0;
-    padding: 8px;
-    width: 100%;
-  }
-  button {
-    padding: 10px;
-    background-color: #42b983;
-    color: white;
-    border: none;
-  }
-  </style>
+   </script>
+<style scoped>
+.signup-box {
+  background-color: #d4edda; /* Light green */
+  padding: 2rem;
+  border-radius: 10px;
+  width: 400px;
+  margin: 2rem auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+input {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  width: 90%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #42b983;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #369b73;
+}
+
+.success {
+  color: green;
+}
+
+.error {
+  color: red;
+}
+</style>
   

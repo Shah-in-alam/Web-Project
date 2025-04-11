@@ -3,7 +3,7 @@
     <Navbar />
     <h1>Welcome to Home</h1>
 
-    <h2>Booking Overview</h2>
+      <h2>Booking Overview</h2>
     <div v-if="loading">Loading...</div>
     <div v-if="error" style="color: red">{{ error }}</div>
 
@@ -103,6 +103,7 @@ export default {
 </script>
 
 <style scoped>
+
 .booking-table {
   width: 100%;
   border-collapse: collapse;
