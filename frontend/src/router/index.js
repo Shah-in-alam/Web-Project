@@ -6,7 +6,7 @@ import Booking from '../components/Booking.vue'
 import Campaign from '../components/Campaign.vue'
 import Feature from '../components/Feature.vue'
 import Review from '../components/Review.vue'
-import AdminPage from '../components/AdminPage.vue';
+
 const routes = [
   { path: '/signup', name: 'SignUp', component: SignUp },
   { path: '/signin', name: 'SignIn', component: SignIn },
@@ -15,7 +15,20 @@ const routes = [
   { path: '/campaign', name: 'Campaign', component: Campaign },
   { path: '/feature', name: 'Feature', component: Feature },
   { path: '/review', name: 'Review', component: Review },
-  { path: '/admin', component: AdminPage }
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('../components/AdminPage.vue'),
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem('user'))
+      if (user?.is_admin === true || user?.is_admin === 1) {
+        next()
+      } else {
+        next('/') // Redirect to home if not admin
+      }
+    }
+  }
+  
 ]
 
 const router = createRouter({

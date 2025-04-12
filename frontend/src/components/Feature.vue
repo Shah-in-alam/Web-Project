@@ -1,4 +1,5 @@
 <template>
+ <div class="feature-container">
   <div class="feature">
     <Navbar />
 
@@ -9,6 +10,7 @@
     <table v-if="features.length" border="1" cellpadding="10">
       <thead>
         <tr>
+          <th>Id</th>
           <th>Name</th>
           <th>Description</th>
           <th>Image</th>
@@ -21,7 +23,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="feat in features" :key="feat.id">
+        <tr v-for="feat in features" :key="feat.features_id">
+          <td>{{ feat.features_id }}</td>
           <td>{{ feat.feature_name }}</td>
           <td>{{ feat.description }}</td>
           <td><img :src="feat.image_url" width="80" /></td>
@@ -34,7 +37,7 @@
         </tr>
       </tbody>
     </table>
-
+<!--
     <h2>Add New Feature</h2>
     <form @submit.prevent="createFeature">
       <input v-model="newFeature.feature_name" placeholder="Feature Name" required />
@@ -53,8 +56,9 @@
       <input v-model.number="newFeature.popularity" type="number" placeholder="Popularity" />
       <input v-model="newFeature.category" placeholder="Category" required />
       <button type="submit">Add Feature</button>
-    </form>
+    </form> !-->
   </div>
+ </div>
 </template>
 
 <script>
@@ -69,6 +73,7 @@ export default {
       features: [],
       error: '',
       newFeature: {
+        feature_id: '',
         feature_name: '',
         description: '',
         image_url: '',
@@ -98,6 +103,7 @@ export default {
         await axios.post('http://localhost:3000/feature', this.newFeature)
         this.fetchFeatures()
         this.newFeature = {
+          feature_id: '',
           feature_name: '',
           description: '',
           image_url: '',
@@ -117,9 +123,14 @@ export default {
 </script>
 
 <style scoped>
+.feature-container{
+  background-color: #d4edda; /* Light green */
+  min-height: 100vh;
+  padding: 20px;
+}
 .feature {
   max-width: 900px;
-  margin: auto;
+  margin: 15px;
 }
 input, label {
   display: block;

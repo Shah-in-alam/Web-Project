@@ -1,5 +1,6 @@
 <template>
-   <Navbar />
+  <div class="booking-container">
+  <Navbar />
   <div class="booking-form">
     <h2>Create a Booking</h2>
 
@@ -18,6 +19,7 @@
 
     <p v-if="success" style="color: green">{{ success }}</p>
     <p v-if="error" style="color: red">{{ error }}</p>
+  </div>
   </div>
 </template>
 
@@ -74,6 +76,11 @@ export default {
 </script>
 
 <style scoped>
+.booking-container{
+  background-color: #d4edda; /* Light green */
+  min-height: 100vh;
+  padding: 20px;
+}
 .booking-form {
   max-width: 500px;
   margin: auto;

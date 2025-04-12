@@ -34,8 +34,15 @@ export default {
       try {
         const { email, password } = this.form
         const response = await axios.post('http://localhost:3000/users/signin', { email, password })
-        localStorage.setItem('user', JSON.stringify(response.data.user))
-        this.$router.push('/')
+        const user=response.data.user
+       localStorage.setItem('user', JSON.stringify(user))
+       window.dispatchEvent(new Event("storage"))
+        if (user.is_admin === true || user.is_admin === 1) {
+          this.$router.push('/admin')
+        } else {
+          this.$router.push('/')
+        }
+        
       } catch (err) {
         this.error = err.response?.data?.error || 'Sign in failed!'
       }

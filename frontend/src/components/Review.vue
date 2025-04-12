@@ -1,4 +1,5 @@
 <template>
+  <div class="review-container">
   <div class="review-page">
     <Navbar />
     <h2>Submit a Review</h2>
@@ -24,6 +25,8 @@
       </li>
     </ul>
   </div>
+  </div>
+
 </template>
 
 <script>
@@ -75,9 +78,14 @@ export default {
 </script>
 
 <style scoped>
+.review-container{
+  background-color: #d4edda; /* Light green */
+  min-height: 100vh;
+  padding: 20px;
+}
 .review-page {
   max-width: 600px;
-  margin: auto;
+  margin: 15px;
 }
 form input, form textarea {
   display: block;

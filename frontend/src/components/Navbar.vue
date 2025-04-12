@@ -7,7 +7,7 @@
       <router-link to="/campaign">Campaign</router-link>
       <router-link to="/feature">Feature</router-link>
       <router-link to="/review">Review</router-link>
-      <router-link v-if="user && user.role === 'admin'" to="/admin">Admin</router-link>
+      <router-link v-if="user && user.is_admin === 1" to="/admin">Admin</router-link>
       <a href="#" @click.prevent="logout">Logout</a>
     </div>
 
@@ -27,9 +27,8 @@ export default {
       return !!localStorage.getItem('user')
     },
     user() {
-      return JSON.parse(localStorage.getItem('user'));
-    
-  }
+      return JSON.parse(localStorage.getItem('user')); 
+   }
   },
   methods: {
     logout() {

@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div class="home-container">
     <Navbar />
-    <h1>Welcome to Home</h1>
-
+     <div class="center-text">
+      <h1>Welcome to Home</h1>
       <h2>Booking Overview</h2>
+    </div>
     <div v-if="loading">Loading...</div>
     <div v-if="error" style="color: red">{{ error }}</div>
 
@@ -103,26 +104,69 @@ export default {
 </script>
 
 <style scoped>
-
+.home-container {
+  background-color: #d4edda; /* Light green */
+  min-height: 100vh;
+  padding: 20px;
+}
+.center-text {
+  text-align: center;
+  margin-top: 20px;
+   
+}
+.center-text h1{
+  color:darkgreen;
+}
 .booking-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
 .booking-table th,
 .booking-table td {
-  border: 1px solid #ccc;
-  padding: 8px;
+  border: 1px solid #ddd;
+  padding: 12px;
   text-align: center;
 }
+
 .booking-table th {
-  background-color: #f2f2f2;
+  background-color: #e9ecef;
+  font-weight: bold;
 }
+
+.booking-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.booking-table tr:hover {
+  background-color: #f1f1f1;
+}
+
 .cancel-section {
-  margin-top: 30px;
+  margin-top: 40px;
+  text-align: left;
 }
+
 .cancel-section input {
-  padding: 6px;
-  margin-right: 8px;
+  padding: 8px;
+  width: 200px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.cancel-section button {
+  padding: 8px 16px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-section button:hover {
+  background-color: #c82333;
 }
 </style>
