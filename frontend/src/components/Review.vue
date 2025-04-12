@@ -17,13 +17,15 @@
 
     <hr />
 
+    <div class="review-placer">
     <h2>All Reviews</h2>
     <div v-if="reviews.length === 0">No reviews yet.</div>
-    <ul>
+    <ul class="review-box">
       <li v-for="r in reviews" :key="r.id">
         <strong>{{ r.user.name || r.user_id }} ({{ r.rating }}/5):</strong> {{ r.review }}
       </li>
     </ul>
+  </div>
   </div>
   </div>
 
@@ -98,6 +100,32 @@ button {
   background-color: #42b983;
   color: white;
   border: none;
+}
+.review-placer {
+  background-color: #e8f5e9;
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+  border-radius: 8px;
+}
+
+.review-box {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.review-box li {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.review-box li:last-child {
+  border-bottom: none;
 }
 </style>
 

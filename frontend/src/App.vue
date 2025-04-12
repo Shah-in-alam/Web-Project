@@ -1,4 +1,5 @@
 <template>
+ <div class="welcomepage">
   <div id="app">
     <Navbar v-if="isAuthenticated" />
 
@@ -7,14 +8,15 @@
     </div>
 
     <div v-else-if="!isAuthenticated && isWelcomePage" class="welcome">
-      <h2>Welcome to my booking website</h2>
-      <router-link to="/signin">Sign In</router-link> |
-      <router-link to="/signup">Sign Up</router-link>
+      <h2 class="wel">Welcome to my booking website</h2>
+      <router-link to="/signin"><button class="btn">Sign In</button></router-link>  
+      <router-link to="/signup"><button class="btn">Sign Up</button></router-link>
     </div>
 
     <!-- Only ONE router view -->
     <router-view />
   </div>
+ </div>
 </template>
 
 <script>
@@ -39,8 +41,22 @@ export default {
 </script>
 
 <style scoped>
+.welcomepage{
+  background-color:lightgreen;
+  height:900px;
+}
 .welcome {
   text-align: center;
   margin-top: 2rem;
+}
+
+.btn{
+   background-color: lightblue;
+   cursor:pointer;
+   
+   
+}
+.btn:hover{
+   background-color: #d4edda;
 }
 </style>
