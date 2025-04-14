@@ -3,8 +3,8 @@
     <!-- Logout button in the corner -->
     <button class="logout-btn" @click="logout">Logout</button>
 
-    <h2>Admin Dashboard</h2>
-    <p>Only admin can see this!</p>
+    <h2 class="Hea">Admin Dashboard 👑</h2>
+    <p class="ne">Only admin can see this!</p>
 
     <!-- Feature Creation -->
     <section class="admin-section">
@@ -49,7 +49,12 @@
       <input v-model="deleteCampaignId" placeholder="Campaign ID to delete" />
       <button @click="deleteCampaign">Delete Campaign</button>
     </section>
-
+  <!-- User Deletion-->
+  <section class="admin-section">
+      <h3>Delete User</h3>
+      <input v-model="deleteUserId" placeholder="User ID " />
+      <button @click="deleteUser">Delete User</button>
+    </section>
     <p v-if="error" class="error">{{ error }}</p>
     <p v-if="success" class="success">{{ success }}</p>
   </div>
@@ -82,6 +87,7 @@ export default {
       },
       deleteFeatureId: '',
       deleteCampaignId: '',
+      deleteUserId:'',
       error: '',
       success: ''
     };
@@ -130,7 +136,17 @@ export default {
       } catch (err) {
         this.error = 'Failed to delete campaign.';
       }
-    }
+    },
+       async deleteUser() {
+      try {
+        this.error = '';
+        this.success = '';
+        const res = await axios.delete(`http://localhost:3000/users/${this.deleteUserId}`);
+        this.success = res.data.message;
+      } catch (err) {
+        this.error = 'Failed to delete user.';
+      }
+    },
   }
 };
 </script>
@@ -141,12 +157,23 @@ export default {
   padding: 2rem;
   background: #e6ffed;
 }
-
+.Hea{
+  color:green;
+  text-align:center;
+  font-size:50px;
+}
+.ne{
+  margin:10px;
+  text-align:center;
+  color:rgb(226, 13, 23);
+  font-size:30px;
+  
+}
 .logout-btn {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background-color: #e74c3c;
+  background-color:rgb(226, 13, 23);
   color: white;
   border: none;
   padding: 8px 16px;

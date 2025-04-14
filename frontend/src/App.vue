@@ -4,7 +4,7 @@
     <Navbar v-if="isAuthenticated" />
 
     <div v-if="isAuthenticated && isAdmin && $route.path === '/admin'" >
-      <h2 style="text-align: center">Welcome Admin 👑</h2>
+     <!-- <h2 style="text-align: center">Welcome Admin 👑</h2> -->
     </div>
 
     <div v-else-if="!isAuthenticated && isWelcomePage" class="welcome">

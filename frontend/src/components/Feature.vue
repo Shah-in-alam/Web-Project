@@ -1,64 +1,51 @@
 <template>
- <div class="feature-container">
-  <div class="feature">
-    <Navbar />
+  <div class="feature-container">
+    <div class="feature">
+      <Navbar />
 
-    <h1>Features</h1>
+      <h1>Features</h1>
+      <div v-if="error" class="error">{{ error }}</div>
 
-    <div v-if="error" class="error">{{ error }}</div>
+      <!-- Table without image -->
+      <table v-if="features.length" class="feature-table">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Available</th>
+            <th>Paid</th>
+            <th>Type</th>
+            <th>Rating</th>
+            <th>Popularity</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="feat in features" :key="feat.features_id">
+            <td>{{ feat.features_id }}</td>
+            <td>{{ feat.feature_name }}</td>
+            <td>{{ feat.description }}</td>
+            <td>{{ feat.available ? 'Yes' : 'No' }}</td>
+            <td>{{ feat.is_paid ? 'Yes' : 'No' }}</td>
+            <td>{{ feat.type }}</td>
+            <td>{{ feat.rating }}</td>
+            <td>{{ feat.popularity }}</td>
+            <td>{{ feat.category }}</td>
+          </tr>
+        </tbody>
+      </table>
 
-    <table v-if="features.length" border="1" cellpadding="10">
-      <thead>
-        <tr>
-          <th>Id</th>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Image</th>
-          <th>Available</th>
-          <th>Paid</th>
-          <th>Type</th>
-          <th>Rating</th>
-          <th>Popularity</th>
-          <th>Category</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="feat in features" :key="feat.features_id">
-          <td>{{ feat.features_id }}</td>
-          <td>{{ feat.feature_name }}</td>
-          <td>{{ feat.description }}</td>
-          <td><img :src="feat.image_url" width="80" /></td>
-         <td>{{ feat.available ? 'Yes' : 'No' }}</td>
-          <td>{{ feat.is_paid ? 'Yes' : 'No' }}</td>
-          <td>{{ feat.type }}</td>
-          <td>{{ feat.rating }}</td>
-          <td>{{ feat.popularity }}</td>
-          <td>{{ feat.category }}</td>
-        </tr>
-      </tbody>
-    </table>
-<!--
-    <h2>Add New Feature</h2>
-    <form @submit.prevent="createFeature">
-      <input v-model="newFeature.feature_name" placeholder="Feature Name" required />
-      <input v-model="newFeature.description" placeholder="Description" required />
-      <input v-model="newFeature.image_url" placeholder="Image URL" required />
-      <label>
-        Available:
-        <input type="checkbox" v-model="newFeature.available" />
-      </label>
-      <label>
-        Is Paid:
-        <input type="checkbox" v-model="newFeature.is_paid" />
-      </label>
-      <input v-model="newFeature.type" placeholder="Type" required />
-      <input v-model.number="newFeature.rating" type="number" placeholder="Rating" />
-      <input v-model.number="newFeature.popularity" type="number" placeholder="Popularity" />
-      <input v-model="newFeature.category" placeholder="Category" required />
-      <button type="submit">Add Feature</button>
-    </form> !-->
+      <!-- Image section below the table -->
+      <div class="image-gallery">
+        <h2>Feature Images</h2>
+        <div v-for="feat in features" :key="feat.features_id" class="image-item">
+          <p><strong>{{ feat.feature_name }}</strong></p>
+          <img :src="feat.image_url" alt="Feature Image" width="150" />
+        </div>
+      </div>
+    </div>
   </div>
- </div>
 </template>
 
 <script>
@@ -97,50 +84,60 @@ export default {
       } catch (err) {
         this.error = 'Failed to fetch features.'
       }
-    },
-    async createFeature() {
-      try {
-        await axios.post('http://localhost:3000/feature', this.newFeature)
-        this.fetchFeatures()
-        this.newFeature = {
-          feature_id: '',
-          feature_name: '',
-          description: '',
-          image_url: '',
-          available: false,
-          is_paid: false,
-          type: '',
-          rating: null,
-          popularity: 0,
-          category: ''
-        }
-      } catch (err) {
-        this.error = 'Failed to create feature.'
-      }
     }
   }
 }
 </script>
 
 <style scoped>
-.feature-container{
+.feature-container {
   background-color: #d4edda; /* Light green */
   min-height: 100vh;
   padding: 20px;
 }
+
 .feature {
   max-width: 900px;
-  margin: 15px;
+  margin: 15px ;
 }
-input, label {
-  display: block;
-  margin: 5px 0;
+
+.feature-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
-img {
+
+.feature-table th,
+.feature-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.feature-table th {
+  background-color: #f2f2f2;
+}
+
+.image-gallery {
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.image-item {
+  text-align: center;
+}
+
+.image-item img {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 .error {
   color: red;
+  margin-top: 1rem;
 }
 </style>
+
