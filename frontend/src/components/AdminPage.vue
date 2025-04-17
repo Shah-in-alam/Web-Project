@@ -49,12 +49,26 @@
       <input v-model="deleteCampaignId" placeholder="Campaign ID to delete" />
       <button @click="deleteCampaign">Delete Campaign</button>
     </section>
-  <!-- User Deletion-->
-  <section class="admin-section">
+
+    <!-- User Deletion -->
+    <section class="admin-section">
       <h3>Delete User</h3>
       <input v-model="deleteUserId" placeholder="User ID " />
       <button @click="deleteUser">Delete User</button>
     </section>
+
+    <!-- Approve Booking -->
+    <section class="admin-section">
+      <h3>Pending Booking</h3>
+      <div v-if="bookings.length === 0">No pending booking.</div>
+      <ul>
+        <li v-for="booking in bookings" :key="booking.booking_id">
+          <p><strong>{{ booking.name }}</strong> ({{ booking.status }})</p>
+          <button @click="approveBooking(booking.booking_id)">Approve</button>
+        </li>
+      </ul>
+    </section>
+
     <p v-if="error" class="error">{{ error }}</p>
     <p v-if="success" class="success">{{ success }}</p>
   </div>
@@ -87,10 +101,14 @@ export default {
       },
       deleteFeatureId: '',
       deleteCampaignId: '',
-      deleteUserId:'',
+      deleteUserId: '',
+      bookings: [],
       error: '',
       success: ''
     };
+  },
+  mounted() {
+    this.fetchPendingBookings();
   },
   methods: {
     logout() {
@@ -137,7 +155,7 @@ export default {
         this.error = 'Failed to delete campaign.';
       }
     },
-       async deleteUser() {
+    async deleteUser() {
       try {
         this.error = '';
         this.success = '';
@@ -147,6 +165,23 @@ export default {
         this.error = 'Failed to delete user.';
       }
     },
+    async fetchPendingBookings() {
+      try {
+        const res = await axios.get('http://localhost:3000/booking?status=Pending');
+        this.bookings = res.data;
+      } catch (err) {
+        this.error = 'Failed to fetch bookings.';
+      }
+    },
+    async approveBooking(bookingId) {
+      try {
+        const res = await axios.patch(`http://localhost:3000/booking/${bookingId}/approve`);
+        this.success = res.data.message;
+        this.fetchPendingBookings();
+      } catch (err) {
+        this.error = 'Failed to approve booking.';
+      }
+    }
   }
 };
 </script>
@@ -157,23 +192,21 @@ export default {
   padding: 2rem;
   background: #e6ffed;
 }
-.Hea{
-  color:green;
-  text-align:center;
-  font-size:50px;
+.Hea {
+  color: green;
+  text-align: center;
+  font-size: 50px;
 }
 .ne{
-  margin:10px;
   text-align:center;
-  color:rgb(226, 13, 23);
-  font-size:30px;
-  
+  color:green;
+  font-size: 30px;
 }
 .logout-btn {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background-color:rgb(226, 13, 23);
+  background-color: #e74c3c;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -191,6 +224,7 @@ export default {
   padding: 1rem;
   border: 1px solid #ccc;
   background: white;
+  
 }
 
 input {
@@ -216,3 +250,5 @@ button {
   color: green;
 }
 </style>
+
+

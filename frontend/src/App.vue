@@ -59,4 +59,8 @@ export default {
 .btn:hover{
    background-color: #d4edda;
 }
+.wel{
+  color:dark-black;
+  font-size:40px;
+}
 </style>

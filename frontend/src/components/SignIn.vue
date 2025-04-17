@@ -6,7 +6,8 @@
       <input v-model="form.password" type="password" placeholder="Password" required />
       <button type="submit">Sign In</button>
     </form>
-    <a href="#" @click.prevent="Forget" class="forget-link">Forget Password?</a>
+    <router-link to="/forget-password" class="forget-link">Forget Password?</router-link>
+
     <p v-if="message" class="success">{{ message }}</p>
     <p v-if="error" class="error">{{ error }}</p>
   </div>
