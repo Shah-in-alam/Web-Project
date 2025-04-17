@@ -42,6 +42,18 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: 'Booking creation failed', details: error });
   }
 });
+// GET /booking?status=Pending
+router.get('/', async (req, res) => {
+  const { status } = req.query;
+  try {
+    const bookings = await prisma.booking.findMany({
+      where: status ? { status } : {},
+    });
+    res.json(bookings);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch bookings', details: error.message });
+  }
+});
 // PATCH /bookings/cancel/:id
 // PATCH /bookings/cancel/:id
 router.patch('/cancel/:id', async (req, res) => {
@@ -59,4 +71,17 @@ router.patch('/cancel/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to cancel booking', details: error.message });
   }
 });
+// In your booking route file
+router.patch('/:id/approve', async (req, res) => {
+  try {
+    const booking = await prisma.booking.update({
+      where: { booking_id: req.params.id },
+      data: { status: 'Approved' },
+    });
+    res.json({ message: 'Booking approved', booking });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to approve booking' });
+  }
+});
+
 module.exports = router;
