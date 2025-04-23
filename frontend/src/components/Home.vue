@@ -1,52 +1,42 @@
 <template>
   <div class="home-container">
     <Navbar />
-     <div class="center-text">
+
+    <div class="center-text">
       <h1>Welcome to Home</h1>
-      <h2>Booking Overview</h2>
+      <h2>Your Bookings</h2>
     </div>
-    <div v-if="loading">Loading...</div>
-    <div v-if="error" style="color: red">{{ error }}</div>
 
-    <table v-if="bookings.length" class="booking-table">
-      <thead>
-        <tr>
-          <th>Booking ID</th>
-          <th>User</th>
-          <th>Spot ID</th>
-          <th>Name</th>
-          <th>Price</th>
-          <th>Amount</th>
-          <th>Check In</th>
-          <th>Check Out</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="booking in bookings" :key="booking.booking_id">
-          <td>{{ booking.booking_id }}</td>
-          <td>{{ booking.user?.name }}</td>
-          <td>{{ booking.spot_id }}</td>
-          <td>{{ booking.name }}</td>
-          <td>{{ booking.price }}</td>
-          <td>{{ booking.amount }}</td>
-          <td>{{ formatDate(booking.check_in) }}</td>
-          <td>{{ formatDate(booking.check_out) }}</td>
-          <td>{{ booking.status }}</td>
-        </tr>
-      </tbody>
-    </table>
+    
+    <div v-if="error" class="error">{{ error }}</div>
 
-    <!-- Cancel Booking Section -->
+    <div v-if="bookings.length" class="booking-grid">
+      <div class="booking-card" v-for="booking in bookings" :key="booking.booking_id">
+        <img :src="booking.campaign.feature.image_url" alt="Booking Image" class="booking-image" style="width: 300px; height: 200px; object-fit: cover; border-radius: 10px" />
+        <div class="booking-details">
+          <h3>{{ booking.campaign.name }}</h3>
+          <p><strong>Description:</strong> {{ booking.campaign.feature.description }}</p>
+          <p><strong>Booking Id:</strong> {{ booking.booking_id }}</p>
+          <p><strong>Price:</strong> ${{ booking.price }}</p>
+          <p><strong>Amount:</strong> {{ booking.amount }}</p>
+          <p><strong>Check In:</strong> {{ formatDate(booking.check_in) }}</p>
+          <p><strong>Check Out:</strong> {{ formatDate(booking.check_out) }}</p>
+          <p><strong>Status:</strong> {{ booking.status }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cancel Booking -->
     <div class="cancel-section">
       <h3>Cancel a Booking</h3>
       <input v-model="cancelId" placeholder="Enter booking ID" />
       <button @click="cancelBooking">Cancel Booking</button>
-      <p v-if="cancelMessage" style="color: green">{{ cancelMessage }}</p>
-      <p v-if="cancelError" style="color: red">{{ cancelError }}</p>
+      <p v-if="cancelMessage" class="success">{{ cancelMessage }}</p>
+      <p v-if="cancelError" class="error">{{ cancelError }}</p>
     </div>
   </div>
 </template>
+
 
 <script>
 import axios from 'axios'
@@ -66,20 +56,24 @@ export default {
     }
   },
   methods: {
+      formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString();
+  },
     async fetchBookings() {
-      try {
-        const res = await axios.get('http://localhost:3000/home')
-        this.bookings = res.data.bookings
-        this.loading = false
-      } catch (err) {
-        this.error = err.response?.data?.error || 'Failed to load bookings'
-        this.loading = false
-      }
-    },
-    formatDate(dateStr) {
-      const date = new Date(dateStr)
-      return date.toLocaleDateString()
-    },
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (!user || !user.user_id) {
+    this.error = 'User not found.';
+    return;
+  }
+
+  try {
+    const res = await axios.get(`http://localhost:3000/home?user_id=${user.user_id}`);
+    this.bookings = res.data.bookings;
+  } catch (err) {
+    this.error = err.response?.data?.error || 'Failed to load bookings';
+  }
+},
     async cancelBooking() {
       this.cancelMessage = ''
       this.cancelError = ''
@@ -91,7 +85,7 @@ export default {
       try {
         const res = await axios.patch(`http://localhost:3000/booking/cancel/${this.cancelId}`)
         this.cancelMessage = res.data.message
-        this.fetchBookings() // Refresh list
+        this.fetchBookings()
       } catch (err) {
         this.cancelError = err.response?.data?.details || 'Failed to cancel booking'
       }
@@ -103,49 +97,73 @@ export default {
 }
 </script>
 
+
 <style scoped>
 .home-container {
-  background-color: #d4edda; /* Light green */
+  background-color: #f0fdf4;
   min-height: 100vh;
   padding: 20px;
 }
+
 .center-text {
   text-align: center;
-  margin-top: 20px;
-   
+  margin: 30px 0;
 }
-.center-text h1{
-  color:darkgreen;
+
+.center-text h1 {
+  color: darkgreen;
+  font-size: 2.5rem;
 }
-.booking-table {
+
+.center-text h2 {
+  color: #555;
+  font-size: 1.5rem;
+}
+
+/* Booking Cards */
+.booking-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.booking-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.booking-card:hover {
+  transform: translateY(-5px);
+}
+
+.booking-image {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 30px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
 }
 
-.booking-table th,
-.booking-table td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: center;
+.booking-details {
+  padding: 16px;
 }
 
-.booking-table th {
-  background-color: #e9ecef;
-  font-weight: bold;
+.booking-details h3 {
+  margin-bottom: 10px;
+  color: #2c3e50;
 }
 
-.booking-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+.booking-details p {
+  margin: 5px 0;
+  color: #444;
 }
 
-.booking-table tr:hover {
-  background-color: #f1f1f1;
-}
-
+/* Cancel Section */
 .cancel-section {
-  margin-top: 40px;
+  margin-top: 50px;
   text-align: left;
 }
 
@@ -153,7 +171,7 @@ export default {
   padding: 8px;
   width: 200px;
   margin-right: 10px;
-  border-radius: 5px;
+  border-radius: 8px;
   border: 1px solid #ccc;
 }
 
@@ -162,11 +180,21 @@ export default {
   background-color: #dc3545;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
 .cancel-section button:hover {
   background-color: #c82333;
+}
+
+.success {
+  color: green;
+  margin-top: 10px;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
 }
 </style>
