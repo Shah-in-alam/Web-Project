@@ -21,14 +21,14 @@ model User {
   password String
   phone    String
   address  String
-    is_admin  Boolean  @default(false)
+  is_admin Boolean   @default(false)
   bookings Booking[]
   reviews  Review[]
 }
 
 model Booking {
   booking_id String   @id
-  spot_id    String
+  spot_id    Int
   name       String
   price      Float
   amount     Int
@@ -37,6 +37,7 @@ model Booking {
   status     String   @default("Pending")
   user_id    String
   user       User     @relation(fields: [user_id], references: [user_id])
+  campaign   Campaign @relation(fields: [spot_id], references: [spot_id])
 
   createdAt DateTime @default(now())
 }
@@ -49,7 +50,8 @@ model Campaign {
   capacity        Int
   features_id     Int
 
-  feature Feature @relation(fields: [features_id], references: [features_id])
+  feature  Feature   @relation(fields: [features_id], references: [features_id])
+  bookings Booking[]
 }
 
 model Feature {
