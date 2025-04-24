@@ -49,7 +49,7 @@ model Campaign {
   price_per_night Float
   capacity        Int
   features_id     Int
-
+  approved        Boolean @default(false)
   feature  Feature   @relation(fields: [features_id], references: [features_id])
   bookings Booking[]
 }
@@ -65,7 +65,7 @@ model Feature {
   rating       Float? // optional
   popularity   Int     @default(0)
   category     String?
-
+  approved     Boolean @default(false)
   campaigns Campaign[]
 }
 
