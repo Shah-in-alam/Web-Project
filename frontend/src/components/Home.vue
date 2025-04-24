@@ -1,13 +1,15 @@
 <template>
   <div class="home-container">
     <Navbar />
-
+      
     <div class="center-text">
-      <h1>Welcome to Home</h1>
+        <div class="user-header">
+      <p>👤 Welcome, {{ username }}</p>
+    </div>
       <h2>Your Bookings</h2>
     </div>
-
-    
+ 
+     
     <div v-if="error" class="error">{{ error }}</div>
 
     <div v-if="bookings.length" class="booking-grid">
@@ -55,6 +57,7 @@ export default {
       cancelError: ''
     }
   },
+  
   methods: {
       formatDate(dateStr) {
     const date = new Date(dateStr);
@@ -93,6 +96,10 @@ export default {
   },
   mounted() {
     this.fetchBookings()
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.name) {
+      this.username = user.name;
+    }
   }
 }
 </script>
@@ -105,14 +112,18 @@ export default {
   padding: 20px;
 }
 
-.center-text {
+.user-header {
   text-align: center;
   margin: 30px 0;
+  color:darkgreen;
+  font-size:30px;
+  transition: background-color 0.3s ease;
 }
 
 .center-text h1 {
   color: darkgreen;
   font-size: 2.5rem;
+  
 }
 
 .center-text h2 {
@@ -187,6 +198,7 @@ export default {
 .cancel-section button:hover {
   background-color: #c82333;
 }
+
 
 .success {
   color: green;

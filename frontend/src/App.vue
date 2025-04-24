@@ -4,11 +4,10 @@
     <Navbar v-if="isAuthenticated" />
 
     <div v-if="isAuthenticated && isAdmin && $route.path === '/admin'" >
-     <!-- <h2 style="text-align: center">Welcome Admin 👑</h2> -->
     </div>
 
     <div v-else-if="!isAuthenticated && isWelcomePage" class="welcome">
-      <h2 class="wel">Welcome to my booking website</h2>
+      <h2 class="wel">✨ Welcome to Campaign Website ✨</h2>
       <router-link to="/signin"><button class="btn">Sign In</button></router-link>  
       <router-link to="/signup"><button class="btn">Sign Up</button></router-link>
     </div>
@@ -50,17 +49,46 @@ export default {
   margin-top: 2rem;
 }
 
-.btn{
-   background-color: lightblue;
-   cursor:pointer;
-   
-   
+.btn {
+  background-color: #4fc3f7;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-.btn:hover{
-   background-color: #d4edda;
+
+.btn:hover {
+  background-color: #29b6f6;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
 }
-.wel{
-  color:dark-black;
-  font-size:40px;
+.wel {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #2e7d32;
+  margin: 2rem 0;
+  font-weight: bold;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(90deg, #a7ffeb, #64ffda, #1de9b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: fadeInUp 1s ease-out;
+  letter-spacing: 1px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

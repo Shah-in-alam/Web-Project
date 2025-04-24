@@ -28,12 +28,31 @@
         </form>
       </section>
 
+      <!-- Feature Suggestions Approval -->
+      <section class="admin-card">
+        <h2>Feature Suggestions</h2>
+        <div v-if="featureSuggestions.length === 0">No feature suggestions found.</div>
+        <ul class="booking-list">
+          <li v-for="f in featureSuggestions" :key="f.features_id">
+            <div>
+              <p><strong>{{ f.feature_name }}</strong></p>
+              <p>{{ f.description }}</p>
+              <p><strong>Type:</strong> {{ f.type }} | <strong>Rating:</strong> {{ f.rating }}</p>
+            </div>
+            <div>
+              <button class="approve-btn" @click="approveFeature(f.features_id)">Approve</button>
+              <button class="danger-btn" @click="deleteFeature(f.features_id)">Decline</button>
+            </div>
+          </li>
+        </ul>
+      </section>
+
       <!-- Feature Deletion -->
       <section class="admin-card">
         <h2>Delete Feature</h2>
         <div class="form-inline">
           <input v-model="deleteFeatureId" placeholder="Feature ID" />
-          <button @click="deleteFeature" class="danger-btn">Delete</button>
+          <button @click="deleteFeature(deleteFeatureId)" class="danger-btn">Delete</button>
         </div>
       </section>
 
@@ -50,12 +69,30 @@
         </form>
       </section>
 
+      <!-- Approve User Campaign Suggestions -->
+      <section class="admin-card">
+        <h2>Campaign Suggestions</h2>
+        <div v-if="suggestions.length === 0">No campaign suggestions found.</div>
+        <ul class="booking-list">
+          <li v-for="camp in suggestions" :key="camp.spot_id">
+            <div>
+              <p><strong>{{ camp.name }}</strong> ({{ camp.location }})</p>
+              <p><strong>Price:</strong> {{ camp.price_per_night }}, <strong>Capacity:</strong> {{ camp.capacity }}</p>
+            </div>
+            <div>
+              <button class="approve-btn" @click="approveCampaign(camp.spot_id)">Approve</button>
+              <button class="danger-btn" @click="deleteCampaign(camp.spot_id)">Decline</button>
+            </div>
+          </li>
+        </ul>
+      </section>
+
       <!-- Campaign Deletion -->
       <section class="admin-card">
         <h2>Delete Campaign</h2>
         <div class="form-inline">
           <input v-model="deleteCampaignId" placeholder="Campaign ID" />
-          <button @click="deleteCampaign" class="danger-btn">Delete</button>
+          <button @click="deleteCampaign(deleteCampaignId)" class="danger-btn">Delete</button>
         </div>
       </section>
 
@@ -120,12 +157,16 @@ export default {
       deleteCampaignId: '',
       deleteUserId: '',
       bookings: [],
+      suggestions: [],
+      featureSuggestions: [],
       error: '',
       success: ''
     };
   },
   mounted() {
     this.fetchPendingBookings();
+    this.fetchCampaignSuggestions();
+    this.fetchFeatureSuggestions();
   },
   methods: {
     logout() {
@@ -136,38 +177,55 @@ export default {
       try {
         this.error = '';
         this.success = '';
-        const res = await axios.post('http://localhost:3000/feature', this.feature);
+        const res = await axios.post('http://localhost:3000/feature', {
+          ...this.feature,
+          approved: true
+        });
         this.success = res.data.message;
       } catch (err) {
         this.error = 'Failed to create feature.';
       }
     },
-    async deleteFeature() {
+    async deleteFeature(id) {
       try {
         this.error = '';
         this.success = '';
-        const res = await axios.delete(`http://localhost:3000/feature/${this.deleteFeatureId}`);
+        const res = await axios.delete(`http://localhost:3000/feature/${id}`);
         this.success = res.data.message;
+        this.fetchFeatureSuggestions();
       } catch (err) {
         this.error = 'Failed to delete feature.';
+      }
+    },
+    async approveFeature(id) {
+      try {
+        const res = await axios.patch(`http://localhost:3000/feature/${id}/approve`);
+        this.success = res.data.message;
+        this.fetchFeatureSuggestions();
+      } catch (err) {
+        this.error = 'Failed to approve feature.';
       }
     },
     async createCampaign() {
       try {
         this.error = '';
         this.success = '';
-        const res = await axios.post('http://localhost:3000/campaign', this.campaign);
+        const res = await axios.post('http://localhost:3000/campaign', {
+          ...this.campaign,
+          approved: true
+        });
         this.success = res.data.message;
       } catch (err) {
         this.error = 'Failed to create campaign.';
       }
     },
-    async deleteCampaign() {
+    async deleteCampaign(id = this.deleteCampaignId) {
       try {
         this.error = '';
         this.success = '';
-        const res = await axios.delete(`http://localhost:3000/campaign/${this.deleteCampaignId}`);
+        const res = await axios.delete(`http://localhost:3000/campaign/${id}`);
         this.success = res.data.message;
+        this.fetchCampaignSuggestions();
       } catch (err) {
         this.error = 'Failed to delete campaign.';
       }
@@ -188,6 +246,31 @@ export default {
         this.bookings = res.data;
       } catch (err) {
         this.error = 'Failed to fetch bookings.';
+      }
+    },
+    async fetchCampaignSuggestions() {
+      try {
+        const res = await axios.get('http://localhost:3000/campaign/pending');
+        this.suggestions = res.data;
+      } catch (err) {
+        this.error = 'Failed to fetch campaign suggestions.';
+      }
+    },
+    async fetchFeatureSuggestions() {
+      try {
+        const res = await axios.get('http://localhost:3000/feature/pending');
+        this.featureSuggestions = res.data;
+      } catch (err) {
+        this.error = 'Failed to fetch feature suggestions.';
+      }
+    },
+    async approveCampaign(id) {
+      try {
+        const res = await axios.patch(`http://localhost:3000/campaign/${id}/approve`);
+        this.success = res.data.message;
+        this.fetchCampaignSuggestions();
+      } catch (err) {
+        this.error = 'Failed to approve campaign.';
       }
     },
     async approveBooking(bookingId) {
@@ -242,7 +325,7 @@ export default {
 }
 
 .admin-card {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
   border-radius: 20px;
   padding: 2rem;
@@ -327,7 +410,7 @@ button {
   background-color: #1e88e5;
 }
 
-/* Booking List */
+/* Booking & Campaign List */
 .booking-list {
   list-style: none;
   padding-left: 0;
@@ -342,6 +425,7 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 /* Alerts */
@@ -400,6 +484,8 @@ button {
   background-color: #c62828;
   transform: scale(1.05);
 }
+
 </style>
+
 
 

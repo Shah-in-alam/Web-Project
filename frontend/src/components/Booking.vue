@@ -2,7 +2,8 @@
   <div class="booking-container">
     <Navbar />
     <div class="booking-form">
-      <h2>Create a Booking</h2>
+    
+      <h2> 📅 Create a Booking</h2>
 
       <form @submit.prevent="submitBooking">
         <input v-model="form.booking_id" placeholder="Booking ID" required />
@@ -101,8 +102,14 @@ export default {
   min-height: 100vh;
   padding: 2rem;
   font-family: 'Segoe UI', sans-serif;
+  
 }
-
+.user-header {
+  text-align: left;
+  font-size: 1rem;
+  color: #2e7d32;
+  margin-bottom: 1rem;
+}
 .booking-form {
   background-color: white;
   max-width: 600px;

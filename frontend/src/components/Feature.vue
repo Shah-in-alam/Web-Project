@@ -1,56 +1,49 @@
 <template>
   <div class="feature-container">
-    <div class="feature">
-      <Navbar />
+    <Navbar />
+    <h1>🌟 Features</h1>
 
-      <h1>Features</h1>
-      <div v-if="error" class="error">{{ error }}</div>
+    <div v-if="error" class="error">{{ error }}</div>
 
-      <!-- Table without image -->
-      <table v-if="features.length" class="feature-table">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Available</th>
-            <th>Paid</th>
-            <th>Type</th>
-            <th>Rating</th>
-            <th>Popularity</th>
-            <th>Category</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="feat in features" :key="feat.features_id">
-            <td>{{ feat.features_id }}</td>
-            <td>{{ feat.feature_name }}</td>
-            <td>{{ feat.description }}</td>
-            <td>{{ feat.available ? 'Yes' : 'No' }}</td>
-            <td>{{ feat.is_paid ? 'Yes' : 'No' }}</td>
-            <td>{{ feat.type }}</td>
-            <td>{{ feat.rating }}</td>
-            <td>{{ feat.popularity }}</td>
-            <td>{{ feat.category }}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- Image section below the table -->
-      <div class="image-gallery">
-        <h2>Feature Images</h2>
-        <div v-for="feat in features" :key="feat.features_id" class="image-item">
-          <p><strong>{{ feat.feature_name }}</strong></p>
-          <img :src="feat.image_url" alt="Feature Image" width="150" />
-        </div>
+    <!-- Display existing features -->
+    <div class="feature-grid">
+      <div class="feature-card" v-for="feat in features" :key="feat.features_id">
+        <img :src="feat.image_url" alt="Feature Image" />
+        <h3>{{ feat.feature_name }}</h3>
+        <p>{{ feat.description }}</p>
+        <p><strong>Type:</strong> {{ feat.type }}</p>
+        <p><strong>Rating:</strong> {{ feat.rating }}</p>
       </div>
+    </div>
+
+    <!-- Button to toggle suggestion form -->
+    <div class="suggest-toggle">
+      <button @click="showSuggestForm = !showSuggestForm">
+        {{ showSuggestForm ? 'Hide Suggestion Form' : '💡 Suggest a Feature' }}
+      </button>
+    </div>
+
+    <!-- Suggest Feature Form -->
+    <div v-if="showSuggestForm" class="suggest-section">
+      <h2>Suggest a New Feature</h2>
+      <form @submit.prevent="suggestFeature" class="suggest-form">
+        <input v-model="newFeature.feature_name" placeholder="Feature Name" required />
+        <input v-model="newFeature.description" placeholder="Description" required />
+        <input v-model="newFeature.image_url" placeholder="Image URL" required />
+        <input v-model="newFeature.type" placeholder="Type" required />
+        <input v-model.number="newFeature.rating" type="number" min="1" max="5" placeholder="Rating" />
+        <input v-model="newFeature.category" placeholder="Category" required />
+        <button type="submit">Submit Suggestion</button>
+      </form>
+
+      <p v-if="message" class="success">{{ message }}</p>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-import Navbar from './Navbar.vue'
+import axios from 'axios';
+import Navbar from './Navbar.vue';
 
 export default {
   name: 'FeaturePage',
@@ -59,85 +52,142 @@ export default {
     return {
       features: [],
       error: '',
+      message: '',
+      showSuggestForm: false,
       newFeature: {
-        feature_id: '',
         feature_name: '',
         description: '',
         image_url: '',
-        available: false,
-        is_paid: false,
         type: '',
         rating: null,
-        popularity: 0,
-        category: ''
+        category: '',
+        available: false,
+        is_paid: false
       }
-    }
+    };
   },
   mounted() {
-    this.fetchFeatures()
+    this.fetchApprovedFeatures();
   },
   methods: {
-    async fetchFeatures() {
+    async fetchApprovedFeatures() {
       try {
-        const res = await axios.get('http://localhost:3000/feature')
-        this.features = res.data
+        const res = await axios.get('http://localhost:3000/feature');
+        this.features = res.data; // only show approved ones
       } catch (err) {
-        this.error = 'Failed to fetch features.'
+        this.error = 'Failed to load features';
+      }
+    },
+    async suggestFeature() {
+      try {
+        await axios.post('http://localhost:3000/feature', {
+          ...this.newFeature,
+          approved: false // user suggestions are not approved yet
+        });
+        this.message = 'Feature suggestion submitted for review!';
+        this.newFeature = {
+          feature_name: '',
+          description: '',
+          image_url: '',
+          type: '',
+          rating: null,
+          category: '',
+          available: false,
+          is_paid: false
+        };
+      } catch (err) {
+        this.error = 'Failed to submit suggestion';
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>
 .feature-container {
-  background-color: #d4edda; /* Light green */
+  background: #e8f5e9;
   min-height: 100vh;
-  padding: 20px;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
 }
-
-.feature {
-  max-width: 900px;
-  margin: 15px ;
-}
-
-.feature-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-.feature-table th,
-.feature-table td {
-  border: 1px solid #ccc;
-  padding: 8px;
+h1 {
   text-align: center;
+  color: #2e7d32;
+  margin-bottom: 1rem;
 }
-
-.feature-table th {
-  background-color: #f2f2f2;
-}
-
-.image-gallery {
-  margin-top: 30px;
+.feature-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
 }
-
-.image-item {
+.feature-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 250px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.feature-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.suggest-toggle {
   text-align: center;
+  margin: 2rem 0;
 }
-
-.image-item img {
+.suggest-toggle button {
+  background: #00796b;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.suggest-toggle button:hover {
+  background-color: #004d40;
+}
+.suggest-section {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.suggest-form input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 8px;
 }
-
-.error {
-  color: red;
+button[type="submit"] {
+  background: #43a047;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button[type="submit"]:hover {
+  background-color: #2e7d32;
+}
+.success {
+  color: green;
+  text-align: center;
   margin-top: 1rem;
 }
+.error {
+  color: red;
+  text-align: center;
+}
 </style>
+
+
 

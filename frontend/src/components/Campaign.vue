@@ -1,45 +1,42 @@
 <template>
-  <div class="campagin-container">
-  <div class="campaign">
+  <div class="campaign-container">
     <Navbar />
+    
+    <div class="campaign-wrapper">
+      <h1>📢 Available Campaigns</h1>
 
-    <h1>Campaigns</h1>
+      <div v-if="error" class="error">{{ error }}</div>
 
-    <div v-if="error" class="error">{{ error }}</div>
+      
 
-    <table v-if="campaigns.length" border="1" cellpadding="10">
-      <thead>
-        <tr class="tabli">
-          <th>Spot ID</th>
-          <th>Features ID</th>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Price/Night</th>
-          <th>Capacity</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="camp in campaigns" :key="camp.spot_id">
-          <td>{{ camp.spot_id }}</td>
-          <td>{{ camp.features_id }}</td>
-          <td>{{ camp.name }}</td>
-          <td>{{ camp.location }}</td>
-          <td>{{ camp.price_per_night }}</td>
-          <td>{{ camp.capacity }}</td>
-        </tr>
-      </tbody>
-    </table>
+      <!-- Approved Campaigns -->
+      <div class="campaign-grid">
+        <div v-for="camp in campaigns" :key="camp.spot_id" class="campaign-card">
+          <h2>{{ camp.name }}</h2>
+          <p><strong>📍 Location:</strong> {{ camp.location }}</p>
+          <p><strong>💰 Price/Night:</strong> ${{ camp.price_per_night }}</p>
+          <p><strong>👥 Capacity:</strong> {{ camp.capacity }}</p>
+          <p><strong>🔗 Features ID:</strong> {{ camp.features_id }}</p>
+          <p><strong>🆔 Spot ID:</strong> {{ camp.spot_id }}</p>
+        </div>
+      </div>
+      <!-- Suggest Button -->
+      <button class="suggest-btn" @click="showForm = !showForm">
+        {{ showForm ? 'Cancel Suggestion' : 'Suggest a Campaign Spot' }}
+      </button>
 
-   <!-- <h2>Add New Campaign</h2>
-    <form @submit.prevent="createCampaign">
-      <input v-model="newCampaign.name" placeholder="Name" required />
-      <input v-model="newCampaign.location" placeholder="Location" required />
-      <input v-model="newCampaign.price_per_night" type="number" step="0.01" placeholder="Price per night" required />
-      <input v-model="newCampaign.capacity" type="number" placeholder="Capacity" required />
-      <input v-model="newCampaign.features_id" type="number" placeholder="Features ID" required />
-      <button type="submit">Add Campaign</button>
-    </form> !-->
-  </div>
+      <!-- Suggestion Form -->
+      <form v-if="showForm" @submit.prevent="submitSuggestion" class="suggest-form">
+        <input v-model="suggest.name" placeholder="Name" required />
+        <input v-model="suggest.location" placeholder="Location" required />
+        <input v-model.number="suggest.price_per_night" placeholder="Price per Night" required />
+        <input v-model.number="suggest.capacity" placeholder="Capacity" required />
+        <input v-model.number="suggest.features_id" placeholder="Features ID" required />
+        <button type="submit">Submit Suggestion</button>
+        <p v-if="success" class="success">{{ success }}</p>
+        <p v-if="error" class="error">{{ error }}</p>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -54,7 +51,9 @@ export default {
     return {
       campaigns: [],
       error: '',
-      newCampaign: {
+      success: '',
+      showForm: false,
+      suggest: {
         name: '',
         location: '',
         price_per_night: '',
@@ -74,51 +73,129 @@ export default {
       } catch (err) {
         this.error = 'Failed to fetch campaigns.'
       }
+    },
+    async submitSuggestion() {
+      this.success = ''
+      this.error = ''
+      try {
+        await axios.post('http://localhost:3000/campaign', this.suggest)
+        this.success = 'Suggestion submitted! Waiting for admin approval.'
+        this.showForm = false
+        this.suggest = {
+          name: '',
+          location: '',
+          price_per_night: '',
+          capacity: '',
+          features_id: ''
+        }
+      } catch (err) {
+        this.error = err.response?.data?.error || 'Failed to submit suggestion.'
+      }
     }
-    // async createCampaign() {
-    //   try {
-    //     await axios.post('http://localhost:3000/campaign', this.newCampaign)
-    //     this.fetchCampaigns()
-    //     this.newCampaign = { name: '', location: '', price_per_night: '', capacity: '', features_id: '' }
-    //   } catch (err) {
-    //     this.error = 'Failed to create campaign.'
-    //   }
-    // },
-    // async deleteCampaign(id) {
-    //   try {
-    //     await axios.delete(`http://localhost:3000/campaign/${id}`)
-    //     this.fetchCampaigns()
-    //   } catch (err) {
-    //     this.error = 'Failed to delete campaign.'
-    //   }
-    // }
   }
 }
 </script>
 
 <style scoped>
-.campagin-container{
-  background-color: #d4edda; /* Light green */
+.campaign-container {
+  background: linear-gradient(to bottom, #d4edda, #b2fab4);
   min-height: 100vh;
-  padding: 20px;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
 }
-.campaign {
-  max-width: 800px;
-  margin: display-relative;
- 
+
+.campaign-wrapper {
+  max-width: 1000px;
+  margin: auto;
 }
-.campagin h1{
-  tex-align:center;
+
+h1 {
+  text-align: center;
+  color: #2e7d32;
+  margin-bottom: 2rem;
 }
-form input {
-  margin: 5px;
-  padding: 5px;
-}
-.tabli{
-  color:green;
-}
+
 .error {
   color: red;
-  margin-bottom: 1rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+}
+
+.success {
+  color: green;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.suggest-btn {
+  background-color: #42b983;
+  color: white;
+  padding: 10px 20px;
+  margin: 1rem auto 2rem;
+  display: block;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.suggest-form {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.suggest-form input {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+.suggest-form button {
+  background-color: #2e8b57;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.campaign-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+
+.campaign-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 280px;
+  padding: 1.5rem;
+  transition: transform 0.2s ease;
+}
+
+.campaign-card:hover {
+  transform: translateY(-4px);
+}
+
+.campaign-card h2 {
+  margin-bottom: 0.75rem;
+  color: #2c3e50;
+}
+
+.campaign-card p {
+  margin: 6px 0;
+  color: #444;
+  font-size: 0.95rem;
 }
 </style>
