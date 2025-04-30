@@ -37,6 +37,7 @@
       <p v-if="cancelError" class="error">{{ cancelError }}</p>
     </div>
   </div>
+  <div class="end"> @2025 All Right Recived!</div>
 </template>
 
 
@@ -198,7 +199,10 @@ export default {
 .cancel-section button:hover {
   background-color: #c82333;
 }
-
+.end{
+  color:darkgreen;
+  text-align:center;
+}
 
 .success {
   color: green;
