@@ -13,6 +13,7 @@
           type="number"
           min="1"
           max="5"
+          step="0.1"
           placeholder="Rating (1-5)"
           required
         />
