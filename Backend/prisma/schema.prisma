@@ -73,7 +73,7 @@ model Review {
   review_id Int      @id @default(autoincrement())
   user_id   String
   spot_id   String
-  rating    Int // from 1 to 5
+  rating    Float // from 1 to 5
   review    String // ✅ the actual comment
   createdAt DateTime @default(now())
 
