@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+
 // const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const homeRouter = require('./routes/home');
@@ -43,6 +44,8 @@ app.use('/campaign', campaignRouter);
 app.use('/feature', featureRouter);
 app.use('/review',reviewRouter);
 app.use('/admin', adminRoutes);
+
+
 // Start the server on port 3000
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');

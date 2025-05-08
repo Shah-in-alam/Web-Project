@@ -175,5 +175,7 @@ router.delete('/:id',async (req,res) => {
     console.error('Delete user error:',error);
     res.status(500).json({error: 'Failed to delete user'});
   }
+
+
 });
 module.exports = router;
