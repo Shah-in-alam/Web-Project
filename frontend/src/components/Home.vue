@@ -108,7 +108,7 @@ export default {
 
 <style scoped>
 .home-container {
-  background-color: #f0fdf4;
+  background: linear-gradient(to bottom, #d4edda, #a8f0b0);
   min-height: 100vh;
   padding: 20px;
 }
