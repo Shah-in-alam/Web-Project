@@ -23,16 +23,18 @@
       <p v-if="success" class="success">{{ success }}</p>
       <p v-if="error" class="error">{{ error }}</p>
     </div>
+    <AppFooter />
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import Navbar from './Navbar.vue';
+import AppFooter from './Footer.vue';
 
 export default {
   name: 'BookingPage',
-  components: { Navbar },
+  components: { Navbar ,AppFooter},
   data() {
     return {
       form: {

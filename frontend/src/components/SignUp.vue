@@ -50,7 +50,7 @@
    </script>
 <style scoped>
 .signup-box {
-  background-color: #d4edda; /* Light green */
+  background-color:rgb(227, 231, 228); /* Light green */
   padding: 2rem;
   border-radius: 10px;
   width: 400px;
@@ -69,7 +69,7 @@ input {
 }
 
 button {
-  background-color: #42b983;
+  background-color:rgb(232, 240, 236);
   color: white;
   padding: 10px 20px;
   border: none;

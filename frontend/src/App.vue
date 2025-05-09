@@ -40,10 +40,14 @@ export default {
 </script>
 
 <style scoped>
-.welcomepage{
-  background-color:lightgreen;
-  height:900px;
+.welcomepage {
+  background-image: url('@/assets/proxy-image.png'); /* Use the image from the assets folder */
+  background-size: cover; /* Ensure the image covers the entire background */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  height: 900px;
 }
+
 .welcome {
   text-align: center;
   margin-top: 2rem;
@@ -67,6 +71,7 @@ export default {
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
 }
+
 .wel {
   text-align: center;
   font-size: 2.2rem;
