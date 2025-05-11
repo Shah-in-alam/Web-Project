@@ -2,9 +2,7 @@
   <div class="booking-container">
     <Navbar />
     <div class="booking-form">
-    
-      <h2> 📅 Create a Booking</h2>
-
+      <h2>📅 Create a Booking</h2>
       <form @submit.prevent="submitBooking">
         <input v-model="form.booking_id" placeholder="Booking ID" required />
         <input v-model="form.spot_id" type="number" placeholder="Spot ID" required />
@@ -13,13 +11,9 @@
         <input v-model="form.amount" type="number" placeholder="Amount" required />
         <input v-model="form.check_in" type="datetime-local" placeholder="Check In" required />
         <input v-model="form.check_out" type="datetime-local" placeholder="Check Out" required />
-
-        <!-- User ID is hidden but automatically filled -->
         <input type="hidden" v-model="form.user_id" />
-
         <button type="submit">Book Now</button>
       </form>
-
       <p v-if="success" class="success">{{ success }}</p>
       <p v-if="error" class="error">{{ error }}</p>
     </div>
@@ -34,7 +28,7 @@ import AppFooter from './Footer.vue';
 
 export default {
   name: 'BookingPage',
-  components: { Navbar ,AppFooter},
+  components: { Navbar, AppFooter },
   data() {
     return {
       form: {
@@ -61,7 +55,6 @@ export default {
     async submitBooking() {
       this.success = '';
       this.error = '';
-
       const payload = {
         booking_id: this.form.booking_id,
         spot_id: parseInt(this.form.spot_id),
@@ -72,7 +65,6 @@ export default {
         check_out: new Date(this.form.check_out),
         user_id: this.form.user_id
       };
-
       try {
         const response = await axios.post('http://localhost:3000/booking', payload);
         this.success = response.data.message;
@@ -100,63 +92,75 @@ export default {
 
 <style scoped>
 .booking-container {
-  background: linear-gradient(to bottom, #d4edda, #a8f0b0);
   min-height: 100vh;
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to bottom, #e0f7fa 0%, #d4edda 100%);
   font-family: 'Segoe UI', sans-serif;
-  
+  position: relative;
 }
-.user-header {
-  text-align: left;
-  font-size: 1rem;
-  color: #2e7d32;
-  margin-bottom: 1rem;
-}
+
 .booking-form {
-  background-color: white;
-  max-width: 600px;
-  margin: auto;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 7vh;
+  margin-bottom: 5vh;
+  background: #fff;
+  max-width: 480px;
+  width: 100%;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(60, 60, 60, 0.13);
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeInUp 0.7s;
 }
 
 h2 {
   text-align: center;
-  margin-bottom: 1rem;
-  color: #2e7d32;
+  margin-bottom: 1.5rem;
+  color: #219150;
+  font-size: 1.7rem;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #b2ff59, #43a047, #b2ff59);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
 }
 
 input {
   display: block;
-  margin-bottom: 12px;
-  padding: 10px;
+  margin-bottom: 15px;
+  padding: 12px;
   width: 100%;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #b2dfdb;
   font-size: 16px;
+  background: #f9fbe7;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 input:focus {
   outline: none;
-  border-color: #42b983;
-  box-shadow: 0 0 0 2px rgba(66, 185, 131, 0.2);
+  border-color: #43a047;
+  box-shadow: 0 0 0 2px #b2ff59;
 }
 
 button {
   padding: 12px;
-  background-color: #42b983;
-  color: white;
+  background: linear-gradient(90deg, #43a047, #b2ff59);
+  color: #fff;
   border: none;
   width: 100%;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: bold;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(67, 160, 71, 0.08);
+  transition: background 0.3s, transform 0.2s;
 }
 
 button:hover {
-  background-color: #369a6e;
+  background: linear-gradient(90deg, #388e3c, #b2ff59);
+  transform: translateY(-2px) scale(1.03);
 }
 
 .success {
@@ -171,5 +175,22 @@ button:hover {
   color: #c0392b;
   margin-top: 1rem;
   font-weight: bold;
+}
+
+/* Make footer always at the bottom */
+.booking-container > .footer,
+.booking-container > AppFooter {
+  margin-top: auto;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

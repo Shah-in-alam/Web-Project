@@ -34,20 +34,25 @@
             <strong>{{ r.user?.name || r.user_id }}</strong>
             <span class="rating">{{ r.rating }}/5 ⭐</span>
           </div>
+          <div class="review-meta">
+            <span class="spot-id">Spot ID: {{ r.spot_id }}</span>
+          </div>
           <p class="review-text">{{ r.review }}</p>
         </div>
       </div>
     </div>
+    <AppFooter />
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import Navbar from './Navbar.vue'
+import AppFooter from './Footer.vue'
 
 export default {
   name: 'ReviewPage',
-  components: { Navbar },
+  components: { Navbar, AppFooter },
   data() {
     return {
       form: {
@@ -190,6 +195,17 @@ h2 {
 
 .rating {
   color: #f39c12;
+}
+
+.review-meta {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #388e3c;
+}
+
+.spot-id {
+  font-style: italic;
+  font-size: 12px;
 }
 
 .review-text {
