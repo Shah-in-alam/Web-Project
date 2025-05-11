@@ -1,69 +1,92 @@
-# Campaign Management System
+🎯 Campaign Management System
+A modern full-stack web application for managing campaigns, bookings, features, and user reviews. Built with Vue.js (frontend) and Node.js/Express with Prisma ORM (backend), and designed to be scalable, responsive, and user-friendly.
 
-A full-stack web application for managing campaigns, bookings, features, and user reviews. This project is built with **Vue.js** for the frontend and **Node.js/Express** with **Prisma** for the backend.
+🚀 Features
+🔐 User Authentication – Sign Up, Sign In, Logout, and Password Reset.
 
----
+🏕️ Campaign Management – Create, view, and manage campaigns (with Google Maps integration).
 
-## Features
+📅 Booking System – Book campaign spots and manage reservations.
 
-- **User Authentication:** Sign Up, Sign In, Logout, and Password Reset.
-- **Campaign Management:** View, create, and manage campaigns (with Google Maps integration).
-- **Booking System:** Book campaign spots and manage your bookings.
-- **Feature Management:** Explore and suggest new features.
-- **Review System:** Submit and view reviews for campaign spots.
-- **Admin Panel:** Admins can manage campaigns, bookings, features, and users.
-- **Responsive Design:** Works on desktop, tablet, and mobile devices.
-- **Social Media Links:** Footer includes links to X, Instagram, and Facebook.
-- **Modern UI:** Clean, modern, and responsive interface with animated forms and cards.
+🌟 Feature Management – Explore and suggest campaign features.
 
----
+📝 Review System – Submit and browse user reviews for campaigns.
 
+🛠️ Admin Dashboard – Manage users, bookings, features, and campaigns.
 
-## Project Structure
+📱 Responsive Design – Mobile-friendly interface.
 
+🌐 Social Media Footer – Links to Instagram, Facebook, and X (Twitter).
 
+✨ Modern UI – Clean design with smooth animations and transitions.
+
+🧱 Project Structure
+bash
+Copy
 Web-Project/
- ├── Backend/ 
- # Node.js/Express backend with Prisma ORM 
- │ ├── routes/ # API route handlers (users, campaigns, bookings, etc.) 
- │ 
- ├── prisma/ # Prisma schema and migrations 
- │ ├── app.js # Express app setup │ 
- └── ... # Other backend files 
- ├── frontend/ # Vue.js frontend │
- ├── src/ │
- │ ├── assets/
-  # Images and static files │ 
- │ ├── components/ # Vue components (Navbar, Footer, etc.) │ 
- │ ├── views/ # Page views (Home, Booking, Campaign, etc.) │ 
- │ ├── router/ # Vue Router configuration │ 
- │ ├── App.vue # Root Vue component │ 
- │ └── main.js # Entry point 
- │ └── ... # Other frontend files 
- └── README.md # Project documentation
-# Frontend Setup
-The frontend will run at http://localhost:8080 by default.
-The backend will run at http://localhost:3000 by default.
-# API Endpoints
-User: /users/signup, /users/signin, /users/reset-password
-Campaign: /campaign
-Booking: /booking
-Feature: /feature
-Review: /review
-# Technologies Used
-Frontend: Vue.js, Vue Router, Axios, Font Awesome, CSS3
-Backend: Node.js, Express, Prisma ORM, bcryptjs
-Database: MySQL or PostgreSQL
-# UI Highlights
-Navbar: Includes logo, navigation links, and user/admin options.
-Footer: Contains About Us, Contact Us, and social media links (X, Instagram, Facebook) using <router-link> for internal navigation.
-Booking Page: Modern card design, animated form, and sticky footer.
-Review Page: Displays all reviews with spot ID, user, and rating.
-Forget Password: Animated, modern reset form with a link back to login.
-# Author
- Mohammad Shahin Alam 
-# Suppervisor 
- Collin Van Der Vorst 
-# Contact
-For questions or support, please contact [mshahinalam37@gmail.com].
+├── Backend/                # Node.js/Express backend
+│   ├── routes/            # API routes (users, campaigns, bookings, etc.)
+│   ├── prisma/            # Prisma schema & migrations
+│   └── app.js             # Express app setup
+│
+├── Frontend/              # Vue.js frontend
+│   ├── src/
+│   │   ├── assets/        # Images & static assets
+│   │   ├── components/    # Navbar, Footer, etc.
+│   │   ├── views/         # Pages (Home, Booking, Campaigns, etc.)
+│   │   ├── router/        # Vue Router config
+│   │   ├── App.vue        # Root component
+│   │   └── main.js        # Vue app entry
+│
+└── README.md              # Project documentation
+🌐 Deployment Info
+Frontend: Runs on http://localhost:8080
 
+Backend: Runs on http://localhost:3000
+
+🔌 API Endpoints
+Category	Endpoints
+User	POST /users/signup, POST /users/signin, POST /users/reset-password
+Campaign	GET /campaigns, POST /campaigns, DELETE /campaigns/:id
+Booking	POST /booking
+Feature	GET /features, POST /features
+Review	POST /review, GET /review
+
+🧰 Technologies Used
+Frontend:
+
+Vue.js, Vue Router
+
+Axios, Font Awesome
+
+CSS3, Scoped Styling
+
+Backend:
+
+Node.js, Express.js
+
+Prisma ORM
+
+bcrypt (for password hashing)
+
+Database:
+
+MySQL (or PostgreSQL supported)
+
+🎨 UI Highlights
+Navbar: Dynamic links based on user role (User/Admin)
+
+Footer: Informational sections + social media icons (Instagram, Facebook, X)
+
+Booking Page: Card layout with animations and a sticky footer
+
+Review Page: Review listing with user, spot ID, and ratings
+
+Forget Password Page: Clean, modern animated form
+
+👨‍💻 Author
+Mohammad Shahin Alam
+📧 mshahinalam37@gmail.com
+
+🎓 Supervisor
+Collin Van Der Vorst
