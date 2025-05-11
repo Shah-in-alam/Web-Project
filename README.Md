@@ -21,8 +21,7 @@ A modern full-stack web application for managing campaigns, bookings, features, 
 ✨ Modern UI – Clean design with smooth animations and transitions.
 
 # 🧱 Project Structure
-
-## Web-Project/
+Web-Project/
 ├── Backend/                # Node.js/Express backend
 │   ├── routes/            # API routes (users, campaigns, bookings, etc.)
 │   ├── prisma/            # Prisma schema & migrations
@@ -38,6 +37,7 @@ A modern full-stack web application for managing campaigns, bookings, features, 
 │   │   └── main.js        # Vue app entry
 │
 └── README.md              # Project documentation
+
 # 🌐 Deployment Info
 Frontend: Runs on http://localhost:8080
 
