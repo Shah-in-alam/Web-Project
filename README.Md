@@ -1,7 +1,7 @@
-🎯 Campaign Management System
+# 🎯 Campaign Management System
 A modern full-stack web application for managing campaigns, bookings, features, and user reviews. Built with Vue.js (frontend) and Node.js/Express with Prisma ORM (backend), and designed to be scalable, responsive, and user-friendly.
 
-🚀 Features
+# 🚀 Features
 🔐 User Authentication – Sign Up, Sign In, Logout, and Password Reset.
 
 🏕️ Campaign Management – Create, view, and manage campaigns (with Google Maps integration).
@@ -20,10 +20,9 @@ A modern full-stack web application for managing campaigns, bookings, features, 
 
 ✨ Modern UI – Clean design with smooth animations and transitions.
 
-🧱 Project Structure
-bash
-Copy
-Web-Project/
+# 🧱 Project Structure
+
+## Web-Project/
 ├── Backend/                # Node.js/Express backend
 │   ├── routes/            # API routes (users, campaigns, bookings, etc.)
 │   ├── prisma/            # Prisma schema & migrations
@@ -39,7 +38,7 @@ Web-Project/
 │   │   └── main.js        # Vue app entry
 │
 └── README.md              # Project documentation
-🌐 Deployment Info
+# 🌐 Deployment Info
 Frontend: Runs on http://localhost:8080
 
 Backend: Runs on http://localhost:3000
@@ -73,7 +72,7 @@ Database:
 
 MySQL (or PostgreSQL supported)
 
-🎨 UI Highlights
+# 🎨 UI Highlights
 Navbar: Dynamic links based on user role (User/Admin)
 
 Footer: Informational sections + social media icons (Instagram, Facebook, X)
@@ -84,9 +83,9 @@ Review Page: Review listing with user, spot ID, and ratings
 
 Forget Password Page: Clean, modern animated form
 
-👨‍💻 Author
-Mohammad Shahin Alam
+# 👨‍💻 Author
+## Mohammad Shahin Alam
 📧 mshahinalam37@gmail.com
 
-🎓 Supervisor
+# 🎓 Supervisor
 Collin Van Der Vorst
