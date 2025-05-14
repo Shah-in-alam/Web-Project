@@ -17,7 +17,7 @@
           <input v-model="feature.description" placeholder="Description" required />
           <input v-model="feature.image_url" placeholder="Image URL" required />
           <input v-model="feature.type" placeholder="Type" required />
-          <input v-model.number="feature.rating" type="number" placeholder="Rating" />
+          <input v-model.number="feature.rating" type="number" placeholder="Rating" step="0.1"/>
           <input v-model.number="feature.popularity" type="number" placeholder="Popularity" />
           <input v-model="feature.category" placeholder="Category" required />
           <div class="checkbox-row">
@@ -182,6 +182,18 @@ export default {
           approved: true
         });
         this.success = res.data.message;
+        // Reset the feature form fields after successful creation
+        this.feature = {
+          feature_name: '',
+          description: '',
+          image_url: '',
+          available: false,
+          is_paid: false,
+          type: '',
+          rating: null,
+          popularity: '',
+          category: ''
+        };
       } catch (err) {
         this.error = 'Failed to create feature.';
       }
