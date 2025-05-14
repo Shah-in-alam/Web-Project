@@ -73,6 +73,7 @@ router.post('/', async (req, res) => {
     });
     res.status(201).json({ message: 'Feature created', feature: newFeature });
   } catch (error) {
+    console.error('Error creating feature:', error);
     res.status(500).json({ error: 'Error creating feature', details: error });
   }
 });

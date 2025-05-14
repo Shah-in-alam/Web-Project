@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../node_modules/.prisma/client"
@@ -14,19 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  user_id  String    @id
-  name     String
-  email    String    @unique
-  password String
-  phone    String
-  address  String
-  is_admin Boolean   @default(false)
-  bookings Booking[]
-  reviews  Review[]
-}
-
-model Booking {
+model booking {
   booking_id String   @id
   spot_id    Int
   name       String
@@ -36,46 +18,63 @@ model Booking {
   check_out  DateTime
   status     String   @default("Pending")
   user_id    String
-  user       User     @relation(fields: [user_id], references: [user_id])
-  campaign   Campaign @relation(fields: [spot_id], references: [spot_id])
+  createdAt  DateTime @default(now())
+  campaign   campaign @relation(fields: [spot_id], references: [spot_id], map: "Booking_spot_id_fkey")
+  user       user     @relation(fields: [user_id], references: [user_id], map: "Booking_user_id_fkey")
 
-  createdAt DateTime @default(now())
+  @@index([spot_id], map: "Booking_spot_id_fkey")
+  @@index([user_id], map: "Booking_user_id_fkey")
 }
 
-model Campaign {
-  spot_id         Int    @id @default(autoincrement())
+model campaign {
+  spot_id         Int       @id @default(autoincrement())
   name            String
   location        String
   price_per_night Float
   capacity        Int
   features_id     Int
-  approved        Boolean @default(false)
-  feature  Feature   @relation(fields: [features_id], references: [features_id])
-  bookings Booking[]
+  approved        Boolean   @default(false)
+  booking         booking[]
+  feature         feature   @relation(fields: [features_id], references: [features_id], map: "Campaign_features_id_fkey")
+
+  @@index([features_id], map: "Campaign_features_id_fkey")
 }
 
-model Feature {
-  features_id  Int     @id @default(autoincrement())
+model feature {
+  features_id  Int        @id @default(autoincrement())
   feature_name String
-  description  String?
+  description  String?    @db.Text
   image_url    String?
-  available    Boolean @default(true)
-  is_paid      Boolean @default(false)
+  available    Boolean    @default(true)
+  is_paid      Boolean    @default(false)
   type         String?
-  rating       Float? // optional
-  popularity   Int     @default(0)
+  rating       Float?
+  popularity   Int        @default(0)
   category     String?
-  approved     Boolean @default(false)
-  campaigns Campaign[]
+  approved     Boolean    @default(false)
+  campaign     campaign[]
 }
 
-model Review {
+model review {
   review_id Int      @id @default(autoincrement())
   user_id   String
   spot_id   String
-  rating    Float // from 1 to 5
-  review    String // ✅ the actual comment
+  rating    Float
+  review    String
   createdAt DateTime @default(now())
+  user      user     @relation(fields: [user_id], references: [user_id], map: "Review_user_id_fkey")
 
-  user User @relation(fields: [user_id], references: [user_id])
+  @@index([user_id], map: "Review_user_id_fkey")
+}
+
+model user {
+  user_id  String    @id
+  name     String
+  email    String    @unique(map: "User_email_key")
+  password String
+  phone    String
+  address  String
+  is_admin Boolean   @default(false)
+  booking  booking[]
+  review   review[]
 }
