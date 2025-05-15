@@ -7,6 +7,7 @@ import Campaign from '../components/Campaign.vue'
 import Feature from '../components/Feature.vue'
 import Review from '../components/Review.vue'
 import ForgetPassword from '../components/ForgetPassword.vue'
+import OAuthSuccess from '../components/OAuthSuccess.vue'
 
 const routes = [
   { path: '/signup', name: 'SignUp', component: SignUp },
@@ -16,7 +17,8 @@ const routes = [
   { path: '/campaign', name: 'Campaign', component: Campaign },
   { path: '/feature', name: 'Feature', component: Feature },
   { path: '/review', name: 'Review', component: Review },
-  {path: '/forget-password',component: ForgetPassword},
+  {path: '/forget-password',name: ForgetPassword,component: ForgetPassword},
+  {path: '/oauth-success', name: 'OAuthSuccess', component: OAuthSuccess},
   {
     path: '/admin',
     name: 'Admin',
