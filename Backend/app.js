@@ -5,6 +5,12 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const session = require('express-session');
+//Outh 
+require('dotenv').config();
+const passport = require('passport');
+require('./config/passport-config');
+
 
 // const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -14,6 +20,7 @@ const campaignRouter = require('./routes/campaign');
 const featureRouter = require('./routes/feature');
 const reviewRouter = require('./routes/review');
 const adminRoutes = require('./routes/admin');
+const authRoutes = require('./routes/auth'); 
 const app = express();
 
 // Enable CORS for all origins
@@ -35,6 +42,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
+// ✅ Session setup (before passport.session)
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'mysecret', // Use a strong secret in .env
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // true if using HTTPS
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 1 day
+  }
+}));
+//Passport session//
+app.use(passport.initialize());
+app.use(passport.session());
 // Use routers
 // app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -44,6 +65,7 @@ app.use('/campaign', campaignRouter);
 app.use('/feature', featureRouter);
 app.use('/review',reviewRouter);
 app.use('/admin', adminRoutes);
+app.use('/auth', authRoutes); // 
 
 
 // Start the server on port 3000
