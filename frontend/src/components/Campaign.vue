@@ -21,7 +21,7 @@
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
           ></iframe>
-          <p><strong>💰 Price/Night:</strong> ${{ camp.price_per_night }}</p>
+          <p><strong>💰 Price:</strong> ${{ camp.price_per_night }} </p>
           <p><strong>👥 Capacity:</strong> {{ camp.capacity }}</p>
           <p><strong>🔗 Features ID:</strong> {{ camp.features_id }}</p>
           <p><strong>🆔 Spot ID:</strong> {{ camp.spot_id }}</p>

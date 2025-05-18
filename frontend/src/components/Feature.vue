@@ -10,10 +10,11 @@
       <div class="feature-card" v-for="feat in features" :key="feat.features_id">
         <img :src="feat.image_url" alt="Feature Image" />
         <h3>{{ feat.feature_name }}</h3>
+        <p> <strong> Id: </strong>{{ feat.features_id}}</p>
         <p>{{ feat.description }}</p>
         <p><strong>Type:</strong> {{ feat.type }}</p>
         <p><strong>Rating:</strong> ⭐ {{ feat.rating }}</p>
-        <p><strong>Popularity:</strong> {{ feat.popularity }}</p>
+        <p><strong>Popularity:</strong> {{ feat.popularity }}%</p>
       </div>
     </div>
 
