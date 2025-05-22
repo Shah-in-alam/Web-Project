@@ -6,19 +6,22 @@ import Booking from '../components/Booking.vue'
 import Campaign from '../components/Campaign.vue'
 import Feature from '../components/Feature.vue'
 import Review from '../components/Review.vue'
+import PaymentPage from '../components/Payment.vue';
 import ForgetPassword from '../components/ForgetPassword.vue'
 import OAuthSuccess from '../components/OAuthSuccess.vue'
+
 
 const routes = [
   { path: '/signup', name: 'SignUp', component: SignUp },
   { path: '/signin', name: 'SignIn', component: SignIn },
   { path: '/', name: 'Home', component: Home },
-  { path: '/booking', name: 'Booking', component: Booking },
+  { path: '/booking/:spot_id?', name: 'Booking', component: Booking },
   { path: '/campaign', name: 'Campaign', component: Campaign },
   { path: '/feature', name: 'Feature', component: Feature },
   { path: '/review', name: 'Review', component: Review },
-  {path: '/forget-password',name: ForgetPassword,component: ForgetPassword},
-  {path: '/oauth-success', name: 'OAuthSuccess', component: OAuthSuccess},
+  { path: '/forget-password', name: 'ForgetPassword', component: ForgetPassword },
+  { path: '/oauth-success', name: 'OAuthSuccess', component: OAuthSuccess },
+  { path: '/payment', name: 'Payment', component: PaymentPage },
   {
     path: '/admin',
     name: 'Admin',
@@ -32,7 +35,6 @@ const routes = [
       }
     }
   }
-  
 ]
 
 const router = createRouter({

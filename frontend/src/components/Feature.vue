@@ -9,12 +9,34 @@
     <div class="feature-grid">
       <div class="feature-card" v-for="feat in features" :key="feat.features_id">
         <img :src="feat.image_url" alt="Feature Image" />
-        <h3>{{ feat.feature_name }}</h3>
-        <p> <strong> Id: </strong>{{ feat.features_id}}</p>
-        <p>{{ feat.description }}</p>
-        <p><strong>Type:</strong> {{ feat.type }}</p>
-        <p><strong>Rating:</strong> ⭐ {{ feat.rating }}</p>
-        <p><strong>Popularity:</strong> {{ feat.popularity }}%</p>
+        <h3 class="feature-title">{{ feat.feature_name }}</h3>
+        <div class="feature-meta">
+          <span class="feature-id"><strong>#{{ feat.features_id }}</strong></span>
+          <span class="feature-rating" :title="'Rating: ' + feat.rating">
+            <span class="star">⭐</span>
+            <span class="rating-value">{{ feat.rating }}</span>
+          </span>
+        </div>
+        <p class="feature-desc">{{ feat.description }}</p>
+        <button class="details-btn" @click="openDetails(feat)">See Details</button>
+      </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div v-if="showDetails" class="modal-overlay" @click.self="closeDetails">
+      <div class="modal-content">
+        <button class="close-btn" @click="closeDetails">&times;</button>
+        <img :src="selectedFeature.image_url" alt="Feature Image" class="modal-img" />
+        <h2>{{ selectedFeature.feature_name }}</h2>
+        <p><strong>Description:</strong> {{ selectedFeature.description }}</p>
+        <div class="modal-details">
+          <div><span class="icon">📦</span> <b>Type:</b> {{ selectedFeature.type }}</div>
+          <div><span class="icon">🔥</span> <b>Popularity:</b> {{ selectedFeature.popularity }}%</div>
+          <div><span class="icon">🏷️</span> <b>Category:</b> {{ selectedFeature.category }}</div>
+          <div><span class="icon">✅</span> <b>Available:</b> <span :class="selectedFeature.available ? 'yes' : 'no'">{{ selectedFeature.available ? 'Yes' : 'No' }}</span></div>
+          <div><span class="icon">💲</span> <b>Paid:</b> <span :class="selectedFeature.is_paid ? 'yes' : 'no'">{{ selectedFeature.is_paid ? 'Yes' : 'No' }}</span></div>
+          <div><span class="icon">⭐</span> <b>Rating:</b> {{ selectedFeature.rating }}</div>
+        </div>
       </div>
     </div>
 
@@ -72,6 +94,8 @@ export default {
       error: '',
       message: '',
       showSuggestForm: false,
+      showDetails: false,
+      selectedFeature: {},
       newFeature: {
         feature_name: '',
         description: '',
@@ -123,6 +147,14 @@ export default {
         available: true,
         is_paid: false
       };
+    },
+    openDetails(feature) {
+      this.selectedFeature = feature;
+      this.showDetails = true;
+    },
+    closeDetails() {
+      this.showDetails = false;
+      this.selectedFeature = {};
     }
   }
 };
@@ -173,16 +205,115 @@ h1 {
   margin-bottom: 1rem;
 }
 
-.feature-card h3 {
-  color: #2c3e50;
-  font-size: 1.2rem;
+.feature-title {
+  color: #1b5e20;
+  font-size: 1.3rem;
+  margin-bottom: 0.2rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.feature-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 0.5rem;
 }
 
-.feature-card p {
-  font-size: 0.9rem;
-  color: #555;
-  margin-bottom: 0.4rem;
+.feature-id {
+  background: #e0f2f1;
+  color: #00796b;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+}
+
+.feature-rating {
+  display: flex;
+  align-items: center;
+  background: #fffde7;
+  color: #fbc02d;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.feature-rating .star {
+  margin-right: 3px;
+}
+
+.feature-desc {
+  color: #444;
+  font-size: 0.98rem;
+  margin-bottom: 0.7rem;
+  min-height: 48px;
+}
+
+.feature-divider {
+  border: none;
+  border-top: 1.5px solid #e0e0e0;
+  margin: 1rem 0 1.2rem 0;
+}
+
+.feature-details {
+  background: #f7faf9;
+  border-radius: 8px;
+  padding: 1rem 0.7rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem 1.2rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 1px 4px rgba(60, 120, 60, 0.04);
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.97rem;
+  padding: 2px 0;
+}
+
+.detail-row .icon {
+  font-size: 1.1rem;
+  margin-right: 2px;
+}
+
+detail-row .label {
+  color: #388e3c;
+  font-weight: 500;
+  margin-right: 2px;
+}
+
+.detail-row .value {
+  font-weight: 500;
+  color: #333;
+}
+
+.detail-row .yes {
+  color: #388e3c;
+  font-weight: bold;
+}
+
+.detail-row .no {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.details-btn {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+.details-btn:hover {
+  background: #125ea2;
 }
 
 .suggest-toggle {
@@ -306,6 +437,58 @@ button[type="submit"]:hover {
   color: red;
   text-align: center;
   margin-top: 1rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 400px;
+  width: 95%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  position: relative;
+  animation: fadeInUp 0.3s;
+}
+.close-btn {
+  position: absolute;
+  top: 10px; right: 14px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #888;
+  cursor: pointer;
+}
+.modal-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.modal-details {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+.modal-details .icon {
+  margin-right: 4px;
+}
+.yes {
+  color: #388e3c;
+  font-weight: bold;
+}
+.no {
+  color: #d32f2f;
+  font-weight: bold;
 }
 </style>
 

@@ -25,6 +25,8 @@
           <p><strong>👥 Capacity:</strong> {{ camp.capacity }}</p>
           <p><strong>🔗 Features ID:</strong> {{ camp.features_id }}</p>
           <p><strong>🆔 Spot ID:</strong> {{ camp.spot_id }}</p>
+          <!-- Book Now Button -->
+          <button class="book-btn" @click="goToBooking(camp.spot_id)">Book Now</button>
         </div>
       </div>
 
@@ -37,7 +39,7 @@
       <form v-if="showForm" @submit.prevent="submitSuggestion" class="suggest-form">
         <input v-model="suggest.name" placeholder="Name" required />
         <input v-model="suggest.location" placeholder="Location" required />
-        <input v-model.number="suggest.price_per_night" placeholder="Price per Night" required />
+        <input v-model.number="suggest.price_per_night" placeholder="Price" required step="0.01"/>
         <input v-model.number="suggest.capacity" placeholder="Capacity" required />
         <input v-model.number="suggest.features_id" placeholder="Features ID" required />
         <button type="submit">Submit Suggestion</button>
@@ -99,6 +101,9 @@ export default {
       } catch (err) {
         this.error = err.response?.data?.error || 'Failed to submit suggestion.'
       }
+    },
+    goToBooking(spotId) {
+      this.$router.push({ name: 'Booking', params: { spot_id: spotId } });
     }
   }
 }
@@ -225,5 +230,23 @@ h1 {
   margin: 6px 0;
   color: #444;
   font-size: 0.95rem;
+}
+
+/* Book Button */
+.book-btn {
+  background-color: #1976d2;
+  color: #fff;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 12px;
+  width: 100%;
+  transition: background 0.2s;
+}
+
+.book-btn:hover {
+  background-color: #125ea2;
 }
 </style>

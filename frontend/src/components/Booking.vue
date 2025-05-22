@@ -3,11 +3,12 @@
     <Navbar />
     <div class="booking-form">
       <h2>📅 Create a Booking</h2>
+      <p v-if="!form.spot_id" class="info">Fill in all fields to book manually.</p>
       <form @submit.prevent="submitBooking">
         <input v-model="form.booking_id" placeholder="Booking ID" required />
         <input v-model="form.spot_id" type="number" placeholder="Spot ID" required />
         <input v-model="form.name" placeholder="Name" required />
-        <input v-model="form.price" type="number" placeholder="Price" required />
+        <input v-model="form.price" type="number" placeholder="Price" step ="0.01" required />
         <input v-model="form.amount" type="number" placeholder="Amount" required />
         <input v-model="form.check_in" type="datetime-local" placeholder="Check In" required />
         <input v-model="form.check_out" type="datetime-local" placeholder="Check Out" required />
@@ -50,8 +51,23 @@ export default {
     if (user?.user_id) {
       this.form.user_id = user.user_id;
     }
+    if (this.$route.params.spot_id) {
+      this.form.spot_id = this.$route.params.spot_id;
+      this.fetchCampaignDetails(this.form.spot_id); // Fetch and fill details
+    }
   },
   methods: {
+    async fetchCampaignDetails(spotId) {
+      try {
+        const res = await axios.get(`http://localhost:3000/campaign/${spotId}`);
+        const camp = res.data;
+        this.form.name = camp.name;
+        this.form.price = camp.price_per_night;
+        // Add more fields if needed
+      } catch (err) {
+        console.error('Failed to fetch campaign details:', err);
+      }
+    },
     async submitBooking() {
       this.success = '';
       this.error = '';
@@ -69,6 +85,7 @@ export default {
         const response = await axios.post('http://localhost:3000/booking', payload);
         this.success = response.data.message;
         this.clearForm();
+       this.$router.push('/payment');
       } catch (err) {
         this.error = err.response?.data?.error || 'Failed to create booking.';
         console.error('❌ Booking Error:', err);
